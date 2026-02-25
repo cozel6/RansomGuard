@@ -7,6 +7,13 @@
 
 This project was developed as part of a research paper on **"Ransomware Evolution and Defense Mechanisms"**.
 
+## Security
+
+- Files are never executed on the server
+- Analysis is exclusively static
+- Files are deleted from the server after analysis
+- Maximum upload size: 10MB
+
 ## Academic Context
 
 This project is part of the research paper:
@@ -20,5 +27,3 @@ This project is part of the research paper:
 - CISA #StopRansomware Guide (2023)
 - Razaulla et al., "The Age of Ransomware", IEEE Access (2023)
 - Sgandurra et al., "Automated Dynamic Analysis of Ransomware", arXiv (2016)
-
----
