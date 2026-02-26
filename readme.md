@@ -7,6 +7,12 @@
 
 This project was developed as part of a research paper on **"Ransomware Evolution and Defense Mechanisms"**.
 
+## Getting Started
+
+### Backend Setup
+
+To set up and run the backend API, follow the instructions in [SETUP.md](SETUP.md).
+
 ## Security
 
 - Files are never executed on the server
