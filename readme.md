@@ -36,7 +36,7 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 
 ### Prerequisites
 
-- .NET 9.0 SDK
+- .NET 10.0 SDK (version 10.0.103 or newer)
 - Visual Studio Code or Visual Studio 2022
 
 ### Setup
