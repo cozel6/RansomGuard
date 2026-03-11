@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using RansomGuard.API.Data;
 using Serilog;
 using Serilog.Events;
 
@@ -25,6 +27,10 @@ try
 
     // Add services
     builder.Services.AddOpenApi();
+
+    builder.Services.AddDbContext<RansomGuardDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
     var app = builder.Build();
 
