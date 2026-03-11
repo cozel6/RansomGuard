@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-02-27
+**Last updated:** 2026-03-11
 
 ## 📋 How to Use This Document
 
@@ -15,14 +15,14 @@
 
 ### 1.1 Testing Infrastructure
 
-- [ ] Create RansomGuard.API.Tests project
-  - [ ] Add xUnit, xUnit.runner.visualstudio, Microsoft.NET.Test.Sdk
-  - [ ] Add Moq for mocking
-  - [ ] Add FluentAssertions for readable assertions
-  - [ ] Add project reference to RansomGuard.API
-  - [ ] Create sample test to verify setup
-- [ ] Add test project to RansomGuard.sln
-- [ ] Verify `dotnet test` runs successfully
+- [x] Create RansomGuard.API.Tests project
+  - [x] Add xUnit, xUnit.runner.visualstudio, Microsoft.NET.Test.Sdk
+  - [x] Add Moq for mocking
+  - [x] Add FluentAssertions for readable assertions
+  - [x] Add project reference to RansomGuard.API
+  - [x] Create sample test to verify setup
+- [x] Add test project to RansomGuard.sln
+- [x] Verify `dotnet test` runs successfully
 
 ### 1.2 Code Quality & Static Analysis
 
@@ -35,9 +35,9 @@
   - [ ] Enable TreatWarningsAsErrors for Release
   - [ ] Enable EnforceCodeStyleInBuild
   - [ ] Configure AnalysisLevel=latest
-- [ ] Add analyzer packages to RansomGuard.API
-  - [ ] SonarAnalyzer.CSharp
-  - [ ] SecurityCodeScan.VS2019
+- [x] Add analyzer packages to RansomGuard.API
+  - [x] SonarAnalyzer.CSharp
+  - [x] SecurityCodeScan.VS2019
 - [ ] Verify `dotnet build` shows analyzer suggestions
 - [ ] Fix any existing analyzer warnings
 
@@ -61,29 +61,30 @@
 
 ### 2.1 File Upload Endpoint
 
+- [x] Create file validation utilities (`Validators/FileValidator.cs`)
+  - [x] Validate file size (max 10MB)
+  - [x] Validate file extension (.exe, .dll whitelist)
+  - [x] Path traversal detection
+- [x] Add unit tests for validation logic
+  - [x] Test file size validation
+  - [x] Test extension validation
+  - [x] Test path traversal attempts (../../etc/passwd)
 - [ ] Create `Controllers/FileUploadController.cs`
   - [ ] POST /api/upload endpoint
   - [ ] Accept IFormFile (multipart/form-data)
-  - [ ] Validate file size (max 10MB)
-  - [ ] Validate file extension (.exe, .dll whitelist)
   - [ ] Validate PE header magic bytes (MZ = 0x4D5A)
   - [ ] Generate GUID filename (prevent path traversal)
   - [ ] Store in isolated temp directory
   - [ ] Return upload ID (GUID)
   - [ ] Log upload events with Serilog
 - [ ] Create `Models/UploadResponse.cs` DTO
-- [ ] Add unit tests for validation logic
-  - [ ] Test file size validation
-  - [ ] Test extension validation
-  - [ ] Test PE header validation
-  - [ ] Test path traversal attempts (../../etc/passwd)
-  - [ ] Test null byte injection (file.exe\0.txt)
+- [ ] Test null byte injection (file.exe\0.txt)
 - [ ] Add integration test for upload endpoint
 - [ ] Document endpoint in XML comments (for Swagger)
 
 ### 2.2 PE Analysis Service
 
-- [ ] Add `PeNet` NuGet package to RansomGuard.API
+- [x] Add `PeNet` NuGet package to RansomGuard.API
 - [ ] Create `Services/PEAnalysisService.cs`
   - [ ] Implement `AnalyzeFileAsync(string filePath)`
   - [ ] Calculate Shannon entropy
@@ -109,10 +110,10 @@
 
 ### 2.3 Database & Persistence
 
-- [ ] Add Entity Framework Core packages
-  - [ ] Microsoft.EntityFrameworkCore
-  - [ ] Microsoft.EntityFrameworkCore.Sqlite
-  - [ ] Microsoft.EntityFrameworkCore.Design
+- [x] Add Entity Framework Core packages
+  - [x] Microsoft.EntityFrameworkCore
+  - [x] Microsoft.EntityFrameworkCore.Sqlite
+  - [x] Microsoft.EntityFrameworkCore.Design
 - [ ] Create `Data/RansomGuardDbContext.cs`
   - [ ] DbSet<AnalysisResult> AnalysisResults
   - [ ] Configure SQLite connection string in appsettings.json
@@ -157,8 +158,8 @@
 ### 3.1 Unit Test Coverage
 
 - [ ] Achieve >80% code coverage for Services layer
-- [ ] Add coverage reporting with Coverlet
-  - [ ] `dotnet add package coverlet.collector`
+- [x] Add coverage reporting with Coverlet
+  - [x] `dotnet add package coverlet.collector`
   - [ ] Run: `dotnet test /p:CollectCoverage=true`
 - [ ] Review coverage report and add missing tests
 
