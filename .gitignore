@@ -417,3 +417,9 @@ FodyWeavers.xsd
 *.msm
 *.msp
 *claude.md
+
+# RansomGuard specific
+backend/RansomGuard.API/appsettings.json
+backend/RansomGuard.API/*.db
+backend/RansomGuard.API/*.db-shm
+backend/RansomGuard.API/*.db-wal

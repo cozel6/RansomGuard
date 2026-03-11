@@ -1,41 +1,61 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using RansomGuard.API.Data;
+using Serilog;
+using Serilog.Events;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: "logs/ransomguard-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.MapOpenApi();
+    Log.Information("Starting RansomGuard API");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Replace default logging with Serilog
+    builder.Host.UseSerilog();
+
+    // Add services
+    builder.Services.AddOpenApi();
+
+    builder.Services.AddDbContext<RansomGuardDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+    var app = builder.Build();
+
+    // Configure middleware
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.UseHttpsRedirection();
+
+    // Health check endpoint
+    app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
+       .WithName("HealthCheck");
+
+    Log.Information("RansomGuard API started successfully");
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
+catch (Exception ex)
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+    Log.Fatal(ex, "Application failed to start");
+    throw;
+}
+finally
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    Log.CloseAndFlush();
 }
