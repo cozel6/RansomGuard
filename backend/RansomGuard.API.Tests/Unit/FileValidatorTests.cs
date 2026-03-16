@@ -6,11 +6,10 @@ namespace RansomGuard.API.Tests.Unit;
 
 public class FileValidatorTests
 {
-    private readonly FileValidator _validator;
 
     public FileValidatorTests()
     {
-        _validator = new FileValidator();
+
     }
 
     #region Extension Validation Tests
@@ -23,7 +22,7 @@ public class FileValidatorTests
     public void IsValidExtension_ValidExtensions_ReturnsTrue(string filename, bool expected)
     {
         // Act
-        var result = _validator.IsValidExtension(filename);
+        var result = FileValidator.IsValidExtension(filename);
 
         // Assert
         result.Should().Be(expected);
@@ -39,7 +38,7 @@ public class FileValidatorTests
     public void IsValidExtension_InvalidExtensions_ReturnsFalse(string filename)
     {
         // Act
-        var result = _validator.IsValidExtension(filename);
+        var result = FileValidator.IsValidExtension(filename);
 
         // Assert
         result.Should().BeFalse();
@@ -56,7 +55,7 @@ public class FileValidatorTests
     public void IsValidSize_ValidSizes_ReturnsTrue(long fileSize, bool expected)
     {
         // Act
-        var result = _validator.IsValidSize(fileSize);
+        var result = FileValidator.IsValidSize(fileSize);
 
         // Assert
         result.Should().Be(expected);
@@ -70,7 +69,7 @@ public class FileValidatorTests
     public void IsValidSize_InvalidSizes_ReturnsFalse(long fileSize)
     {
         // Act
-        var result = _validator.IsValidSize(fileSize);
+        var result = FileValidator.IsValidSize(fileSize);
 
         // Assert
         result.Should().BeFalse();
@@ -89,7 +88,7 @@ public class FileValidatorTests
     public void ContainsPathTraversal_MaliciousFilenames_ReturnsTrue(string filename)
     {
         // Act
-        var result = _validator.ContainsPathTraversal(filename);
+        var result = FileValidator.ContainsPathTraversal(filename);
 
         // Assert
         result.Should().BeTrue("because path traversal should be detected");
@@ -102,10 +101,63 @@ public class FileValidatorTests
     public void ContainsPathTraversal_SafeFilenames_ReturnsFalse(string filename)
     {
         // Act
-        var result = _validator.ContainsPathTraversal(filename);
+        var result = FileValidator.ContainsPathTraversal(filename);
 
         // Assert
         result.Should().BeFalse("because filename is safe");
+    }
+
+    #endregion
+    #region PE Header Validation Tests
+
+    [Fact]
+    public async Task IsValidPEHeader_ValidMZSignature_ReturnsTrue()
+    {
+        // Arrange
+        var stream = new MemoryStream([0x4D, 0x5A, 0x00, 0x00]); // MZ header
+
+        // Act
+        var result = await FileValidator.IsValidPEHeaderAsync(stream);
+
+        // Assert
+        result.Should().BeTrue();
+        stream.Position.Should().Be(0); // Stream position restored
+    }
+
+    [Fact]
+    public async Task IsValidPEHeader_InvalidSignature_ReturnsFalse()
+    {
+        // Arrange
+        var stream = new MemoryStream(new byte[] { 0x50, 0x4B, 0x03, 0x04 }); // ZIP header (PK)
+
+        // Act
+        var result = await FileValidator.IsValidPEHeaderAsync(stream);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task IsValidPEHeader_EmptyStream_ReturnsFalse()
+    {
+        // Arrange
+        var stream = new MemoryStream();
+
+        // Act
+        var result = await FileValidator.IsValidPEHeaderAsync(stream);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task IsValidPEHeader_NullStream_ReturnsFalse()
+    {
+        // Act
+        var result = await FileValidator.IsValidPEHeaderAsync(null!);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     #endregion
