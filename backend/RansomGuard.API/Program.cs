@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RansomGuard.API.Data;
+using RansomGuard.API.Services;
 using Serilog;
 using Serilog.Events;
 
@@ -30,6 +31,9 @@ try
 
     builder.Services.AddDbContext<RansomGuardDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    // Add repositories
+    builder.Services.AddScoped<IAnalysisRepository, AnalysisRepository>();
 
 
     var app = builder.Build();
