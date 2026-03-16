@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-03-11
+**Last updated:** 2026-03-16
 
 ## 📋 How to Use This Document
 
@@ -65,19 +65,24 @@
   - [x] Validate file size (max 10MB)
   - [x] Validate file extension (.exe, .dll whitelist)
   - [x] Path traversal detection
+  - [x] PE header validation (MZ signature 0x4D5A)
+  - [x] Made FileValidator static class for consistency
 - [x] Add unit tests for validation logic
   - [x] Test file size validation
   - [x] Test extension validation
   - [x] Test path traversal attempts (../../etc/passwd)
+  - [x] Test PE header validation (valid MZ, invalid signatures, null/empty streams)
 - [ ] Create `Controllers/FileUploadController.cs`
   - [ ] POST /api/upload endpoint
   - [ ] Accept IFormFile (multipart/form-data)
-  - [ ] Validate PE header magic bytes (MZ = 0x4D5A)
+  - [ ] Call FileValidator.IsValidPEHeaderAsync()
   - [ ] Generate GUID filename (prevent path traversal)
   - [ ] Store in isolated temp directory
   - [ ] Return upload ID (GUID)
   - [ ] Log upload events with Serilog
-- [ ] Create `Models/UploadResponse.cs` DTO
+- [x] Create `Models/UploadResponse.cs` DTO
+- [x] Create `Models/ErrorResponse.cs` DTO
+- [x] Create `Models/Verdict.cs` enum
 - [ ] Test null byte injection (file.exe\0.txt)
 - [ ] Add integration test for upload endpoint
 - [ ] Document endpoint in XML comments (for Swagger)
@@ -93,14 +98,15 @@
   - [ ] Extract export table
   - [ ] Detect suspicious APIs (CryptEncrypt, DeleteFile, etc.)
   - [ ] Generate risk score (0-100) based on heuristics
-- [ ] Create `Models/AnalysisResult.cs` DTO
-  - [ ] UploadId (Guid)
-  - [ ] Filename (string)
-  - [ ] Timestamp (DateTime)
-  - [ ] RiskScore (int)
-  - [ ] Entropy (double)
-  - [ ] SuspiciousAPIs (List<string>)
-  - [ ] Verdict (enum: Safe, Suspicious, Ransomware)
+- [x] Create `Models/AnalysisResult.cs` DTO
+  - [x] UploadId (Guid)
+  - [x] Filename (string)
+  - [x] Timestamp (DateTime)
+  - [x] RiskScore (int)
+  - [x] Entropy (double)
+  - [x] SuspiciousAPIs (List<string>)
+  - [x] Verdict (Verdict enum)
+  - [x] FileHash (SHA256 string)
 - [ ] Register service in `Program.cs` DI container
 - [ ] Add unit tests for analysis logic
   - [ ] Test entropy calculation
@@ -114,19 +120,24 @@
   - [x] Microsoft.EntityFrameworkCore
   - [x] Microsoft.EntityFrameworkCore.Sqlite
   - [x] Microsoft.EntityFrameworkCore.Design
-- [ ] Create `Data/RansomGuardDbContext.cs`
-  - [ ] DbSet<AnalysisResult> AnalysisResults
-  - [ ] Configure SQLite connection string in appsettings.json
-- [ ] Create `Data/Entities/AnalysisResultEntity.cs`
-  - [ ] Map from AnalysisResult DTO
-- [ ] Run EF Core migrations
-  - [ ] `dotnet ef migrations add InitialCreate`
-  - [ ] `dotnet ef database update`
-- [ ] Create `Services/AnalysisRepository.cs`
-  - [ ] `SaveAnalysisAsync(AnalysisResult result)`
-  - [ ] `GetAnalysisByIdAsync(Guid id)`
-  - [ ] `GetRecentAnalysesAsync(int count)`
-- [ ] Register repository in DI container
+- [x] Create `Data/RansomGuardDbContext.cs`
+  - [x] DbSet<AnalysisResultEntity> AnalysisResults
+  - [x] Configure entity mappings with fluent API
+  - [x] Add indexes for Timestamp and FileHash
+  - [x] Configure SQLite connection string in appsettings.json
+- [x] Create `Data/Entities/AnalysisResultEntity.cs`
+  - [x] Map from AnalysisResult DTO
+  - [x] Added proper constraints (max length, required fields)
+- [x] Run EF Core migrations
+  - [x] `dotnet ef migrations add InitialCreate`
+  - [x] `dotnet ef database update`
+- [x] Create `Services/AnalysisRepository.cs`
+  - [x] `SaveAnalysisAsync(AnalysisResultEntity entity)`
+  - [x] `GetAnalysisByIdAsync(Guid id)`
+  - [x] `GetRecentAnalysesAsync(int count)`
+  - [x] Added IAnalysisRepository interface
+  - [x] Added logging for save operations
+- [x] Register repository in DI container (Program.cs)
 - [ ] Add unit tests for repository
 - [ ] Add integration test for database operations
 
