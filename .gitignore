@@ -422,4 +422,4 @@ FodyWeavers.xsd
 backend/RansomGuard.API/appsettings.json
 backend/RansomGuard.API/*.db
 backend/RansomGuard.API/*.db-shm
-backend/RansomGuard.API/*.db-wal
+backend/RansomGuard.API/*.db-walappsettings.json
