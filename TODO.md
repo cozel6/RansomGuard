@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-03-16
+**Last updated:** 2026-03-17
 
 ## 📋 How to Use This Document
 
@@ -72,20 +72,27 @@
   - [x] Test extension validation
   - [x] Test path traversal attempts (../../etc/passwd)
   - [x] Test PE header validation (valid MZ, invalid signatures, null/empty streams)
-- [ ] Create `Controllers/FileUploadController.cs`
-  - [ ] POST /api/upload endpoint
-  - [ ] Accept IFormFile (multipart/form-data)
-  - [ ] Call FileValidator.IsValidPEHeaderAsync()
-  - [ ] Generate GUID filename (prevent path traversal)
-  - [ ] Store in isolated temp directory
-  - [ ] Return upload ID (GUID)
-  - [ ] Log upload events with Serilog
+- [x] Create `Controllers/FileUploadController.cs`
+  - [x] POST /api/upload endpoint
+  - [x] Accept IFormFile (multipart/form-data)
+  - [x] Call FileValidator.IsValidPEHeaderAsync()
+  - [x] Call FileUploadHelper.SaveUploadedFileAsync() with GUID filename
+  - [x] Store in isolated temp directory
+  - [x] Return upload ID (GUID) with UploadResponse
+  - [x] Log upload events with structured logging
+  - [x] All validations implemented (size, extension, path traversal, PE header)
 - [x] Create `Models/UploadResponse.cs` DTO
 - [x] Create `Models/ErrorResponse.cs` DTO
 - [x] Create `Models/Verdict.cs` enum
+- [x] Create `Services/FileUploadHelper.cs` and `IFileUploadHelper` interface
+  - [x] SaveUploadedFileAsync with GUID filename generation
+  - [x] SHA256 hash calculation with Convert.ToHexStringLower()
+  - [x] DeleteFile cleanup method
+  - [x] Temp directory auto-creation
+  - [x] Comprehensive logging
 - [ ] Test null byte injection (file.exe\0.txt)
 - [ ] Add integration test for upload endpoint
-- [ ] Document endpoint in XML comments (for Swagger)
+- [x] Document endpoint in XML comments (for Swagger)
 
 ### 2.2 PE Analysis Service
 
