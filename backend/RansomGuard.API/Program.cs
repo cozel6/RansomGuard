@@ -28,6 +28,8 @@ try
 
     // Add services
     builder.Services.AddOpenApi();
+    builder.Services.AddControllers();
+
 
     builder.Services.AddDbContext<RansomGuardDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
