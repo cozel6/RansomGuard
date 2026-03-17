@@ -35,6 +35,9 @@ try
     // Add repositories
     builder.Services.AddScoped<IAnalysisRepository, AnalysisRepository>();
 
+    // Add file upload helper
+    builder.Services.AddScoped<IFileUploadHelper, FileUploadHelper>();
+
 
     var app = builder.Build();
 
