@@ -11,14 +11,14 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 
 | Component       | Status            | Progress |
 | --------------- | ----------------- | -------- |
-| Backend API     | 🟡 In Development | 20%      |
-| Static Analysis | 🔴 Not Started    | 0%       |
-| Database        | 🔴 Not Started    | 0%       |
+| Backend API     | 🟢 In Development | 75%      |
+| Static Analysis | 🟢 Complete       | 100%     |
+| Database        | 🟢 Complete       | 100%     |
 | ML Service      | ⚪ Deferred       | 0%       |
 | Frontend        | ⚪ Deferred       | 0%       |
 | Research Docs   | 🔴 Not Started    | 0%       |
 
-**Current Focus:** Backend foundation (file upload, PE analysis, persistence)
+**Current Focus:** Backend API integration and end-to-end workflow testing
 
 ## Documentation
 
