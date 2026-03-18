@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using RansomGuard.API.Models;
 using RansomGuard.API.Services;
 using RansomGuard.API.Validators;
@@ -11,12 +12,19 @@ namespace RansomGuard.API.Controllers
     {
         private readonly IFileUploadHelper _fileHelper;
         private readonly ILogger<FileUploadController> _logger;
+        private readonly IPEAnalysisService _analysisService;
+
+        private readonly IAnalysisRepository _repository;
 
         public FileUploadController(
             IFileUploadHelper fileHelper,
+            IPEAnalysisService analysisService,
+            IAnalysisRepository repository,
             ILogger<FileUploadController> logger)
         {
             _fileHelper = fileHelper;
+            _repository = repository;
+            _analysisService = analysisService;
             _logger = logger;
         }
 
@@ -90,23 +98,41 @@ namespace RansomGuard.API.Controllers
             // Save file with GUID filename
             var (filePath, hash) = await _fileHelper.SaveUploadedFileAsync(stream, file.FileName);
 
+            // Perform PE analysis
+            var analysisResult = await _analysisService.AnalyzeFileAsync(filePath, file.FileName, hash);
 
 #pragma warning disable S1135 // Track uses of "TODO" tags
-            // TODO: Call PE Analysis Service (Milestone 5)
-            // TODO: Save to database (Milestone 5)
-            // For now, return placeholder response
-
+            var entity = new Data.Entities.AnalysisResultEntity
+            {
+                Id = analysisResult.UploadId,
+                Filename = analysisResult.Filename,
+                FileHash = analysisResult.FileHash,
+                Timestamp = DateTime.UtcNow,
+                RiskScore = analysisResult.RiskScore,
+                Entropy = analysisResult.Entropy,
+                SuspiciousAPIs = JsonSerializer.Serialize(analysisResult.SuspiciousAPIs),
+                Verdict = analysisResult.Verdict.ToString(),
+                SectionCount = 0, // TODO: Extract from PeFile
+                ImportCount = 0,
+                ExportCount = 0
+            };
 #pragma warning restore S1135 // Track uses of "TODO" tags
 
-            var uploadId = Guid.NewGuid();
-            _logger.LogInformation("Upload successful: {UploadId}, Hash: {Hash}", uploadId, hash);
+            await _repository.SaveAnalysisAsync(entity);
+
+            // Delete temp file (security best practice)
+            _fileHelper.DeleteFile(filePath);
+
+            _logger.LogInformation("Analysis complete: {UploadId}, Verdict: {Verdict}",
+    analysisResult.UploadId, analysisResult.Verdict);
+
 
             return Ok(new UploadResponse
             {
-                UploadId = uploadId,
-                Message = "File uploaded successfully. Analysis pending.",
-                RiskScore = 0,
-                Verdict = Verdict.Safe
+                UploadId = analysisResult.UploadId,
+                Message = $"Analysis complete: {analysisResult.Verdict}",
+                RiskScore = analysisResult.RiskScore,
+                Verdict = analysisResult.Verdict
             });
         }
     }

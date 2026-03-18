@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-03-17
+**Last updated:** 2026-03-18
 
 ## 📋 How to Use This Document
 
@@ -97,14 +97,15 @@
 ### 2.2 PE Analysis Service
 
 - [x] Add `PeNet` NuGet package to RansomGuard.API
-- [ ] Create `Services/PEAnalysisService.cs`
-  - [ ] Implement `AnalyzeFileAsync(string filePath)`
-  - [ ] Calculate Shannon entropy
-  - [ ] Extract PE sections
-  - [ ] Extract import table (API calls)
-  - [ ] Extract export table
-  - [ ] Detect suspicious APIs (CryptEncrypt, DeleteFile, etc.)
-  - [ ] Generate risk score (0-100) based on heuristics
+- [x] Create `Services/PEAnalysisService.cs` and `IPEAnalysisService` interface
+  - [x] Implement `AnalyzeFileAsync(string filePath)`
+  - [x] Calculate Shannon entropy with LINQ optimization
+  - [x] Extract PE sections
+  - [x] Extract import table (API calls)
+  - [x] Extract export table
+  - [x] Detect suspicious APIs with Contains() for better matching
+  - [x] Generate risk score (0-100) with C# 12 switch expressions
+  - [x] Modernized with C# 12/13 features (collection expressions, pattern matching)
 - [x] Create `Models/AnalysisResult.cs` DTO
   - [x] UploadId (Guid)
   - [x] Filename (string)
@@ -114,7 +115,7 @@
   - [x] SuspiciousAPIs (List<string>)
   - [x] Verdict (Verdict enum)
   - [x] FileHash (SHA256 string)
-- [ ] Register service in `Program.cs` DI container
+- [x] Register service in `Program.cs` DI container
 - [ ] Add unit tests for analysis logic
   - [ ] Test entropy calculation
   - [ ] Test suspicious API detection
@@ -150,21 +151,32 @@
 
 ### 2.4 Result Retrieval Endpoints
 
-- [ ] Create `Controllers/AnalysisController.cs`
-  - [ ] GET /api/analysis/{id} - Retrieve single result
-  - [ ] GET /api/analysis/history?count=10 - Recent analyses
-- [ ] Add error handling (404 if not found)
+- [x] Create `Controllers/AnalysisController.cs`
+  - [x] GET /Analysis/{id:guid} - Retrieve single result
+  - [x] GET /Analysis/history?count=10 - Recent analyses
+- [x] Add error handling (404 if not found)
 - [ ] Add response caching headers
-- [ ] Document endpoints in XML comments
+- [x] Document endpoints in XML comments
 - [ ] Add integration tests for retrieval endpoints
 
-### 2.5 End-to-End Workflow Integration
+### 2.5 Swagger UI Configuration
+
+- [x] Install Swashbuckle.AspNetCore package
+- [x] Configure AddSwaggerGen() in Program.cs
+- [x] Configure UseSwagger() and UseSwaggerUI() middleware
+- [x] Add app.MapControllers() for controller routing
+- [x] Add automatic redirect from root (/) to /swagger
+- [x] Remove OpenAPI in favor of classic Swagger UI
+- [ ] Configure Swagger XML documentation output
+- [ ] Add API versioning support
+
+### 2.6 End-to-End Workflow Integration
 
 - [ ] Update `FileUploadController` to call `PEAnalysisService`
-- [ ] Chain: Upload → Analyze → Persist → Return Result
-- [ ] Add async/await throughout the pipeline
+- [ ] Chain: Upload → Validate → Analyze → Persist → Return Result
+- [x] Add async/await throughout the pipeline
 - [ ] Add timeout handling for long-running analysis
-- [ ] Add comprehensive logging
+- [x] Add comprehensive logging (Serilog)
 - [ ] Delete temp files after analysis
 - [ ] Add end-to-end integration test
   - [ ] Upload file → Analyze → Retrieve result → Verify correctness

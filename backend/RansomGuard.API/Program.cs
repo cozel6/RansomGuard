@@ -27,8 +27,11 @@ try
     builder.Host.UseSerilog();
 
     // Add services
-    builder.Services.AddOpenApi();
     builder.Services.AddControllers();
+
+    // Add Swagger
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
 
     builder.Services.AddDbContext<RansomGuardDbContext>(options =>
@@ -40,16 +43,27 @@ try
     // Add file upload helper
     builder.Services.AddScoped<IFileUploadHelper, FileUploadHelper>();
 
+    // Add PE analysis service
+    builder.Services.AddScoped<IPEAnalysisService, PEAnalysisService>();
+
 
     var app = builder.Build();
 
     // Configure middleware
     if (app.Environment.IsDevelopment())
     {
-        app.MapOpenApi();
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();
+
+    // Redirect root to Swagger
+    app.MapGet("/", () => Results.Redirect("/swagger"))
+       .ExcludeFromDescription();
+
+    // Map controllers
+    app.MapControllers();
 
     // Health check endpoint
     app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
