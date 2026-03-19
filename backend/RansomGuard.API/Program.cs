@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RansomGuard.API.Data;
+using RansomGuard.API.Middlewares;
 using RansomGuard.API.Services;
 using Serilog;
 using Serilog.Events;
@@ -55,7 +56,7 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-
+    app.UseMiddleware<ErrorHandlingMiddleware>();
     app.UseHttpsRedirection();
 
     // Redirect root to Swagger
