@@ -99,7 +99,21 @@ namespace RansomGuard.API.Controllers
             var (filePath, hash) = await _fileHelper.SaveUploadedFileAsync(stream, file.FileName);
 
             // Perform PE analysis
-            var analysisResult = await _analysisService.AnalyzeFileAsync(filePath, file.FileName, hash);
+            AnalysisResult analysisResult;
+            try
+            {
+                analysisResult = await _analysisService.AnalyzeFileAsync(filePath, file.FileName, hash);
+            }
+            catch (Exception ex)
+            {
+                _fileHelper.DeleteFile(filePath);
+                _logger.LogWarning("PE parsing failed for {Filename}: {Error}", file.FileName, ex.Message);
+                return BadRequest(new ErrorResponse
+                {
+                    Code = "INVALID_PE_HEADER",
+                    Message = "File is not a valid PE executable"
+                });
+            }
 
 #pragma warning disable S1135 // Track uses of "TODO" tags
             var entity = new Data.Entities.AnalysisResultEntity

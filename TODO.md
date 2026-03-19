@@ -91,7 +91,9 @@
   - [x] Temp directory auto-creation
   - [x] Comprehensive logging
 - [ ] Test null byte injection (file.exe\0.txt)
-- [ ] Add integration test for upload endpoint
+- [x] Add integration test for upload endpoint
+- [x] Create CustomWebApplicationFactory for test database isolation
+- [x] Document testing infrastructure in TESTING.md
 - [x] Document endpoint in XML comments (for Swagger)
 
 ### 2.2 PE Analysis Service

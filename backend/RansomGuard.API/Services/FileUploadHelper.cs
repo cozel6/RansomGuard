@@ -41,9 +41,11 @@ namespace RansomGuard.API.Services
             var filePath = Path.Combine(_tempDirectory, safeFilename);
 
             // Save file to disk
-            using var fileStreamDisk = File.Create(filePath);
-            fileStream.Position = 0; // Reset stream
-            await fileStream.CopyToAsync(fileStreamDisk);
+            using (var fileStreamDisk = File.Create(filePath))
+            {
+                fileStream.Position = 0; // Reset stream
+                await fileStream.CopyToAsync(fileStreamDisk);
+            } // fileStreamDisk closed here before SHA256
 
             // Calulate SHA256 hash
             var hash = await CalculateSHA256Async(filePath);

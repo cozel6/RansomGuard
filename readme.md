@@ -26,6 +26,7 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 
 - **[TODO.md](TODO.md)** - Step-by-step development checklist
 - **[SETUP.md](SETUP.md)** - Backend setup instructions
+- **[TESTING.md](TESTING.md)** - Testing guide and troubleshooting
 
 ### Technical Specifications
 
