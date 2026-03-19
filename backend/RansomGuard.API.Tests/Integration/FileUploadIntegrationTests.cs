@@ -6,12 +6,14 @@ using Xunit;
 
 namespace RansomGuard.API.Tests.Integration
 {
-    public class FileUploadIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class FileUploadIntegrationTests : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory _factory;
 
-        public FileUploadIntegrationTests(WebApplicationFactory<Program> factory)
+        public FileUploadIntegrationTests(CustomWebApplicationFactory factory)
         {
+            _factory = factory;
             _client = factory.CreateClient();
         }
 
@@ -47,12 +49,35 @@ namespace RansomGuard.API.Tests.Integration
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
-        private byte[] CreateMinimalPEFile()
+        private static byte[] CreateMinimalPEFile()
         {
-            // Minimal PE file with MZ header
-            var bytes = new byte[512];
-            bytes[0] = 0x4D; // M
-            bytes[1] = 0x5A; // Z
+            var bytes = new byte[0x200]; // 512 bytes
+
+            // DOS Header
+            bytes[0x00] = 0x4D; // 'M'
+            bytes[0x01] = 0x5A; // 'Z'
+            bytes[0x3C] = 0x40; // e_lfanew: PE header at offset 0x40
+
+            // PE Signature at 0x40
+            bytes[0x40] = 0x50; // 'P'
+            bytes[0x41] = 0x45; // 'E'
+            bytes[0x42] = 0x00;
+            bytes[0x43] = 0x00;
+
+            // COFF File Header at 0x44
+            bytes[0x44] = 0x4C; // Machine: IMAGE_FILE_MACHINE_I386 (0x014C)
+            bytes[0x45] = 0x01;
+            bytes[0x46] = 0x00; // NumberOfSections: 0
+            bytes[0x47] = 0x00;
+            bytes[0x54] = 0xE0; // SizeOfOptionalHeader: 224 (PE32)
+            bytes[0x55] = 0x00;
+            bytes[0x56] = 0x02; // Characteristics: IMAGE_FILE_EXECUTABLE_IMAGE
+            bytes[0x57] = 0x00;
+
+            // Optional Header at 0x58
+            bytes[0x58] = 0x0B; // Magic: 0x010B (PE32)
+            bytes[0x59] = 0x01;
+
             return bytes;
         }
     }
