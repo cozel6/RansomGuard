@@ -1,0 +1,99 @@
+<Project>
+  <!--
+    Central MSBuild configuration for all projects in the solution.
+    This file is automatically imported by all .csproj files in subdirectories.
+
+    Purpose: Enforce strict build settings, code analysis rules, and security practices
+    across the entire RansomGuard backend codebase.
+  -->
+
+  <PropertyGroup Label="Build Configuration">
+    <!-- Enable strict compilation (warnings as errors disabled - use for review only) -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>9999</WarningLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+
+    <!-- Nullable reference types (already enabled in project files, but ensuring consistency) -->
+    <Nullable>enable</Nullable>
+
+    <!-- Generate XML documentation files for API endpoints -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Suppress missing XML comment warnings -->
+  </PropertyGroup>
+
+  <PropertyGroup Label="Code Analysis">
+    <!-- Enable all .NET code analyzers -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+
+    <!-- Run analyzers during build -->
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+
+    <!-- Code quality rules (disabled for warnings as errors - see warnings in build output) -->
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Security Settings">
+    <!-- Enforce secure coding practices -->
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+
+    <!-- Deterministic builds for reproducibility -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--
+    NOTE: Analyzer packages (SecurityCodeScan, SonarAnalyzer) are configured
+    in individual .csproj files to avoid duplication errors.
+    This file enforces analyzer settings via PropertyGroup configuration above.
+  -->
+
+  <!--
+    Specific Code Analysis Rules for RansomGuard
+
+    Security-focused rules (monitored as warnings):
+    - CA2007: Consider calling ConfigureAwait on awaited task (async/await safety)
+    - CA3075: Insecure DTD processing
+    - CA5350-CA5397: Cryptographic weaknesses
+    - CA3001-CA3012: SQL injection, XSS, command injection
+    - CA2000: Dispose objects before losing scope (file upload security)
+    - CA1806, CA1816, CA1821: Performance rules
+
+    Note: All rules are enabled and will show as warnings in build output.
+    For production deployment, review and address all warnings.
+  -->
+
+  <!--
+    Global Suppressions (Use sparingly!)
+
+    Only suppress rules when:
+    1. The rule is not applicable to the project type
+    2. There's a documented architectural decision to deviate
+    3. The suppression is reviewed and approved
+  -->
+  <PropertyGroup Label="Global Suppressions">
+    <!-- Example: Suppress CA1303 (Do not pass literals as localized parameters)
+         Reason: RansomGuard is English-only for academic purposes -->
+    <!-- <NoWarn>$(NoWarn);CA1303</NoWarn> -->
+  </PropertyGroup>
+
+  <!--
+    Test Projects Configuration
+    Conditionally applied to projects ending with .Tests
+  -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <!-- Relax some rules for test projects -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CA1707</NoWarn> <!-- Allow underscores in test method names -->
+    <NoWarn>$(NoWarn);CA1062</NoWarn> <!-- Allow null parameter assumptions in tests -->
+  </PropertyGroup>
+
+  <!--
+    Output Configuration:
+    Using default MSBuild output paths (bin/ and obj/ in project directories)
+    to avoid duplicate AssemblyInfo.cs conflicts.
+  -->
+
+</Project>
