@@ -126,9 +126,9 @@ namespace RansomGuard.API.Controllers
                 Entropy = analysisResult.Entropy,
                 SuspiciousAPIs = JsonSerializer.Serialize(analysisResult.SuspiciousAPIs),
                 Verdict = analysisResult.Verdict.ToString(),
-                SectionCount = 0, // TODO: Extract from PeFile
-                ImportCount = 0,
-                ExportCount = 0
+                SectionCount = analysisResult.SectionCount,
+                ImportCount = analysisResult.ImportCount,
+                ExportCount = analysisResult.ExportCount
             };
 #pragma warning restore S1135 // Track uses of "TODO" tags
 

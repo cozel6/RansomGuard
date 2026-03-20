@@ -47,7 +47,10 @@ namespace RansomGuard.API.Controllers
                 Entropy = entity.Entropy,
                 SuspiciousAPIs = JsonSerializer.Deserialize<List<string>>(entity.SuspiciousAPIs) ?? new(),
                 Verdict = Enum.Parse<Verdict>(entity.Verdict),
-                FileHash = entity.FileHash
+                FileHash = entity.FileHash,
+                SectionCount = entity.SectionCount,
+                ImportCount = entity.ImportCount,
+                ExportCount = entity.ExportCount
             };
             return Ok(result);
         }
@@ -58,7 +61,7 @@ namespace RansomGuard.API.Controllers
         /// <returns>List of recent analyses</returns>
         [HttpGet("history")]
         [ProducesResponseType(typeof(List<AnalysisResult>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetHistoy([FromQuery] int count = 10)
+        public async Task<IActionResult> GetHistory([FromQuery] int count = 10)
         {
             // Cap at 100 to prevent abuse
             count = Math.Min(count, 100);
@@ -74,7 +77,10 @@ namespace RansomGuard.API.Controllers
                 Entropy = e.Entropy,
                 SuspiciousAPIs = JsonSerializer.Deserialize<List<string>>(e.SuspiciousAPIs) ?? new(),
                 Verdict = Enum.Parse<Verdict>(e.Verdict),
-                FileHash = e.FileHash
+                FileHash = e.FileHash,
+                SectionCount = e.SectionCount,
+                ImportCount = e.ImportCount,
+                ExportCount = e.ExportCount
             }).ToList();
 
             return Ok(results);

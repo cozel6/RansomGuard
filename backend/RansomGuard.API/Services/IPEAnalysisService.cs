@@ -40,6 +40,7 @@ namespace RansomGuard.API.Services
             var entropy = CalculateEntropy(filePath);
             var sectionCount = peFile.ImageSectionHeaders?.Length ?? 0;
             var exportCount = peFile.ExportedFunctions?.Length ?? 0;
+            var importCount = peFile.ImportedFunctions?.Length ?? 0;
 
             // Detect suspicious APIs
             var detectedAPIs = DetectSuspiciousAPIs(peFile);
@@ -63,7 +64,11 @@ namespace RansomGuard.API.Services
                 Entropy = entropy,
                 SuspiciousAPIs = detectedAPIs,
                 Verdict = verdict,
-                FileHash = fileHash
+                FileHash = fileHash,
+                SectionCount = sectionCount,
+                ImportCount = importCount,
+                ExportCount = exportCount,
+
             };
         }
 
