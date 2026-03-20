@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PeNet.Header.Resource;
 using RansomGuard.API.Data;
 using RansomGuard.API.Middlewares;
 using RansomGuard.API.Services;
@@ -47,6 +48,19 @@ try
     // Add PE analysis service
     builder.Services.AddScoped<IPEAnalysisService, PEAnalysisService>();
 
+    // Add CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            var allowedOrigins = builder.Configuration.GetSection("RansomGuard:AllowedOrigins").Get<string[]>()
+                ?? ["http://localhost:3000"];
+
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+    });
 
     var app = builder.Build();
 
@@ -58,6 +72,7 @@ try
     }
     app.UseMiddleware<ErrorHandlingMiddleware>();
     app.UseHttpsRedirection();
+    app.UseCors();
 
     // Redirect root to Swagger
     app.MapGet("/", () => Results.Redirect("/swagger"))
