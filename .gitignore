@@ -427,3 +427,4 @@ backend/RansomGuard.API/*.db-walappsettings.json
 # Documentation files (personal notes, not for version control)
 IMPLEMENTATION_GUIDE.md
 CONFIGURATION_SUMMARY.md
+FRONTEND_IMPLEMENTATION_GUIDE.md
