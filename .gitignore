@@ -428,3 +428,5 @@ backend/RansomGuard.API/*.db-walappsettings.json
 IMPLEMENTATION_GUIDE.md
 CONFIGURATION_SUMMARY.md
 FRONTEND_IMPLEMENTATION_GUIDE.md
+docs/implementation/frontend-implementation.md
+frontend-mockup.html
