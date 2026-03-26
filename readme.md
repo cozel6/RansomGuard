@@ -11,18 +11,18 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 
 | Component         | Status            | Progress |
 | ----------------- | ----------------- | -------- |
-| Backend API       | 🟢 Complete       | 96%      |
+| Backend API       | 🟢 Complete       | ~95%     |
 | Static Analysis   | 🟢 Complete       | 100%     |
 | Database          | 🟢 Complete       | 100%     |
-| Code Quality      | 🟢 Complete       | 100%     |
 | Unit Tests        | 🟢 Complete       | 32 tests |
 | Integration Tests | 🟡 Partial        | 2 tests  |
-| ML Service        | ⚪ Deferred       | 0%       |
-| Frontend          | ⚪ Deferred       | 0%       |
+| Frontend          | 🟢 Complete       | 100%     |
+| ML Service        | 🟡 In Progress    | 0%       |
 | Research Docs     | 🔴 Not Started    | 0%       |
+| Docker Deployment | ⚪ Future         | 0%       |
 
-**Current Status:** Backend production-ready with comprehensive code quality tools
-**Last Updated:** 2026-03-20
+**Current Status:** Backend and Frontend complete, ML Service next
+**Last Updated:** 2026-03-26
 
 ## Documentation
 
