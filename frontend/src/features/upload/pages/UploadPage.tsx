@@ -12,7 +12,7 @@ export function UploadPage() {
   const [titleText, setTitleText] = useState('')
   const [descText, setDescText] = useState('')
   const [titleDone, setTitleDone] = useState(false)
-  const [descDone, setDescDone] = useState(false)
+  const [, setDescDone] = useState(false)
   const titleIndexRef = useRef(0)
   const descIndexRef = useRef(0)
 
@@ -68,7 +68,7 @@ export function UploadPage() {
           </span>
         </h1>
         <div className="text-terminal-muted max-w-3xl mx-auto min-h-16 flex items-start justify-center px-8">
-          <span className={!descDone && titleDone ? 'typewriter-cursor' : ''}>
+          <span className={titleDone ? 'typewriter-cursor' : ''}>
             {titleDone && (
               <>
                 <span className="text-terminal-cyan">$ </span>
