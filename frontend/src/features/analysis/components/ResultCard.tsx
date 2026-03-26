@@ -12,10 +12,12 @@ interface ResultCardProps {
 export function ResultCard({ result }: ResultCardProps) {
   return (
     <Card>
-      <CardHeader><CardTitle>Analysis Result</CardTitle></CardHeader>
+      <CardHeader>
+        <CardTitle>ANALYSIS RESULT</CardTitle>
+      </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex items-center justify-between">
-          <span className="text-terminal-muted">Verdict</span>
+          <span className="text-terminal-muted terminal-label">verdict:</span>
           <VerdictBadge verdict={result.verdict} />
         </div>
 
@@ -24,22 +26,22 @@ export function ResultCard({ result }: ResultCardProps) {
         </div>
 
         <div className="space-y-3 border-t border-terminal-light pt-4">
-          <div className="flex justify-between">
-            <span className="text-terminal-muted">Filename</span>
+          <div className="flex justify-between items-center">
+            <span className="text-terminal-muted terminal-label">filename:</span>
             <code className="text-terminal-cyan">{result.filename}</code>
           </div>
-          <div className="flex justify-between">
-            <span className="text-terminal-muted">Entropy</span>
+          <div className="flex justify-between items-center">
+            <span className="text-terminal-muted terminal-label">entropy:</span>
             <span className="text-terminal-green">{result.entropy.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-terminal-muted">File Hash (SHA256)</span>
-            <code className="text-terminal-cyan text-xs truncate max-w-xs" title={result.fileHash}>
-              {result.fileHash.substring(0, 16)}...
+          <div className="flex justify-between items-center">
+            <span className="text-terminal-muted terminal-label">sha256:</span>
+            <code className="text-terminal-cyan text-xs" title={result.fileHash}>
+              {result.fileHash.substring(0, 14)}...
             </code>
           </div>
-          <div className="flex justify-between">
-            <span className="text-terminal-muted">Analyzed</span>
+          <div className="flex justify-between items-center">
+            <span className="text-terminal-muted terminal-label">analyzed:</span>
             <span className="text-terminal-green">{formatTimestamp(result.timestamp)}</span>
           </div>
         </div>

@@ -29,7 +29,7 @@ export function SuspiciousAPIList({ apis }: SuspiciousAPIListProps) {
 
   return (
     <Card>
-      <CardHeader><CardTitle>Suspicious API Calls ({apis.length})</CardTitle></CardHeader>
+      <CardHeader><CardTitle>SUSPICIOUS API CALLS ({apis.length})</CardTitle></CardHeader>
       <CardContent>
         <div className="space-y-2">
           {apis.map((api) => (

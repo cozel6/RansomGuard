@@ -1,11 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  * {
+    font-family: 'Courier Prime', 'Menlo', 'Monaco', 'Courier New', monospace;
+  }
+
   body {
-    @apply bg-terminal-black text-terminal-green font-mono;
-    position: relative;
+    @apply bg-terminal-black text-terminal-muted;
+    background-image:
+      linear-gradient(to bottom, rgba(13, 17, 23, 0.95), rgba(22, 27, 34, 0.98)),
+      repeating-linear-gradient(
+        0deg,
+        rgba(63, 185, 80, 0.03),
+        rgba(63, 185, 80, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
   }
 
   body::before {
@@ -14,15 +28,20 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 2px;
-    background: rgba(63, 185, 80, 0.1);
-    animation: scan 8s linear infinite;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(63, 185, 80, 0.03) 50%
+    );
+    background-size: 100% 4px;
     pointer-events: none;
     z-index: 9999;
+    animation: scan 8s linear infinite;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 12px;
   }
 
   ::-webkit-scrollbar-track {
@@ -30,41 +49,106 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-terminal-green rounded;
+    @apply bg-terminal-green rounded-md;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-terminal-cyan;
   }
 
   ::selection {
-    @apply bg-terminal-green text-terminal-black;
+    background: rgba(63, 185, 80, 0.3);
+    color: #3fb950;
   }
 }
 
 @layer components {
   .text-glow {
-    text-shadow: 0 0 8px rgba(63, 185, 80, 0.6);
+    text-shadow: 0 0 10px currentColor;
   }
 
   .hover-glow {
-    @apply transition-all duration-200;
+    @apply transition-all duration-300;
   }
 
   .hover-glow:hover {
-    text-shadow: 0 0 8px rgba(63, 185, 80, 0.6);
+    text-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
   }
 
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-terminal-green focus:ring-offset-2 focus:ring-offset-terminal-black;
   }
 
+  /* Card terminal style */
   .terminal-card {
-    @apply bg-terminal-dark border border-terminal-light rounded-lg shadow-glow-green;
+    background-color: rgba(22, 27, 34, 0.5);
+    backdrop-filter: blur(10px);
+    @apply border border-terminal-light rounded-lg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .terminal-card:hover {
+    box-shadow: 0 0 20px rgba(63, 185, 80, 0.3);
+  }
+
+  /* Terminal prompt prefix */
+  .terminal-prompt::before {
+    content: '> ';
+    color: #3fb950;
+  }
+
+  .terminal-label::before {
+    content: '$ ';
+    color: #58d1eb;
+  }
+
+  /* Badge styles */
+  .badge-safe {
+    border-color: #3fb950;
+    color: #3fb950;
+    box-shadow: 0 0 20px rgba(63, 185, 80, 0.3);
+  }
+
+  .badge-suspicious {
+    border-color: #f0c74e;
+    color: #f0c74e;
+  }
+
+  .badge-ransomware {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  /* Typewriter cursor */
+  .typewriter-cursor::after {
+    content: '█';
+    color: #3fb950;
+    animation: cursor-blink 1s step-end infinite;
+    margin-left: 2px;
   }
 
   .btn-terminal {
-    @apply bg-terminal-green text-terminal-black font-mono font-semibold px-4 py-2 rounded hover:shadow-glow-green transition-all duration-200;
+    @apply bg-terminal-green text-terminal-black font-mono font-semibold px-4 py-2 rounded hover:bg-terminal-cyan transition-all duration-300;
+    box-shadow: none;
+  }
+
+  .btn-terminal:hover {
+    box-shadow: 0 0 20px rgba(63, 185, 80, 0.4);
   }
 
   .btn-terminal-outline {
-    @apply border border-terminal-green text-terminal-green font-mono px-4 py-2 rounded hover:bg-terminal-green hover:text-terminal-black transition-all duration-200;
+    @apply border border-terminal-green text-terminal-green font-mono px-4 py-2 rounded bg-transparent transition-all duration-300;
+  }
+
+  .btn-terminal-outline:hover {
+    @apply bg-terminal-green/10;
+  }
+
+  .btn-terminal-outline.active {
+    @apply bg-terminal-green text-terminal-black;
   }
 
   .input-terminal {

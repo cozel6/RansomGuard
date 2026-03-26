@@ -32,7 +32,7 @@ export function ResultPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-terminal-green text-glow">Analysis Complete</h1>
+        <h1 className="text-3xl font-bold text-terminal-green text-glow terminal-prompt">ANALYSIS COMPLETE</h1>
         <Button variant="outline" asChild>
           <Link to="/">Analyze Another File</Link>
         </Button>

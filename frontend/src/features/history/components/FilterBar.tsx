@@ -1,5 +1,5 @@
 // src/features/history/components/FilterBar.tsx
-import { Button } from '@/components/ui/Button'
+import { cn } from '@/utils/cn'
 import { Verdict } from '@/types/api.types'
 
 interface FilterBarProps {
@@ -18,14 +18,16 @@ export function FilterBar({ activeFilter, onFilterChange }: FilterBarProps) {
   return (
     <div className="flex gap-2">
       {filters.map((filter) => (
-        <Button
+        <button
           key={filter.label}
-          variant={activeFilter === filter.value ? 'default' : 'outline'}
-          size="sm"
           onClick={() => onFilterChange(filter.value)}
+          className={cn(
+            'btn-terminal-outline text-sm font-medium px-3 py-1.5 rounded cursor-pointer',
+            activeFilter === filter.value && 'active'
+          )}
         >
           {filter.label}
-        </Button>
+        </button>
       ))}
     </div>
   )

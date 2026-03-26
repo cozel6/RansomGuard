@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-03-20
+**Last updated:** 2026-03-26
 
 ## 📋 How to Use This Document
 
@@ -273,48 +273,58 @@
 
 ---
 
-## Phase 5: Frontend Development (Deferred)
+## Phase 5: Frontend Development ✅ COMPLETE
 
 ### 5.1 React Project Setup
 
-- [ ] Create `/frontend` directory
-- [ ] Initialize React app with Vite or Create React App
-- [ ] Configure TypeScript
-- [ ] Add TailwindCSS or Material-UI
-- [ ] Add Axios for HTTP requests
+- [x] Create `/frontend` directory
+- [x] Initialize React app with Vite
+- [x] Configure TypeScript (path aliases, strict mode)
+- [x] Add TailwindCSS (v4.0.0)
+- [x] Add Axios for HTTP requests (via API client)
+- [x] Add React Query (TanStack Query) with QueryProvider
+- [x] Configure `.env.example` for environment variables
 
 ### 5.2 File Upload UI
 
-- [ ] Create FileUpload component
-  - [ ] Drag & drop zone
-  - [ ] File selection button
-  - [ ] File validation (client-side)
-  - [ ] Upload progress indicator
-- [ ] Add error handling and user feedback
+- [x] Create UploadZone component (`features/upload/components/UploadZone.tsx`)
+  - [x] Drag & drop zone
+  - [x] File selection button
+  - [x] Client-side file validation (`utils/validateFile.ts`)
+  - [x] Upload progress indicator via Spinner component
+- [x] Add error handling and user feedback
+- [x] Create `useFileUpload` hook for upload logic
+- [x] Create `UploadPage` with routing
 
 ### 5.3 Results Display
 
-- [ ] Create AnalysisResult component
-  - [ ] Display verdict (SAFE / RANSOMWARE)
-  - [ ] Show risk score with visual indicator (progress bar, color-coded)
-  - [ ] Show entropy value
-  - [ ] List suspicious APIs detected
-  - [ ] Show timestamp
-- [ ] Add result details expansion
+- [x] Create ResultCard component (`features/analysis/components/ResultCard.tsx`)
+  - [x] Display verdict (SAFE / RANSOMWARE) via VerdictBadge
+  - [x] Show risk score with visual indicator via RiskScoreMeter
+  - [x] Show entropy value
+  - [x] List suspicious APIs via SuspiciousAPIList component
+  - [x] Show timestamp
+- [x] Create `useAnalysisResult` hook for data fetching
+- [x] Create `ResultPage` with routing
 
 ### 5.4 History Dashboard
 
-- [ ] Create AnalysisHistory component
-  - [ ] Table of recent analyses
-  - [ ] Pagination
-  - [ ] Click to view details
-- [ ] Add filtering and sorting
+- [x] Create HistoryTable component (`features/history/components/HistoryTable.tsx`)
+  - [x] Table of recent analyses
+  - [x] Click to view details
+- [x] Add FilterBar component for filtering
+- [x] Create `useHistoryData` hook
+- [x] Create `HistoryPage` with routing
 
 ### 5.5 Frontend-Backend Integration
 
-- [ ] Configure CORS in backend (already done)
-- [ ] Test API calls from React app
-- [ ] Add loading states
+- [x] Configure CORS in backend (already done)
+- [x] Create API client (`services/api/client.ts`) with Axios
+- [x] Create analysis API service (`services/api/analysis.api.ts`)
+- [x] Define TypeScript types for API responses (`types/api.types.ts`)
+- [x] Add loading states (Spinner component)
+- [x] App routing setup with React Router in `App.tsx`
+- [ ] Test API calls with running backend (end-to-end)
 - [ ] Add error boundaries
 
 ---
@@ -427,6 +437,8 @@
 - [x] API documentation up-to-date (Swagger) - live at /swagger endpoint
 - [x] README.md updated with project status - updated 2026-03-20
 - [x] SETUP.md reflects current dependencies - up-to-date
+- [x] Frontend implemented - React + TypeScript + Tailwind + React Query ✅
+- [ ] Frontend-backend end-to-end test (API calls from React to .NET)
 - [ ] Demo video/screenshots created (optional)
 - [ ] Deployment guide documented - not required for academic demo
 

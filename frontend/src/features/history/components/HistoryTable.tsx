@@ -24,7 +24,7 @@ export function HistoryTable({ data }: HistoryTableProps) {
 
   return (
     <Card>
-      <CardHeader><CardTitle>Analysis History ({data.length})</CardTitle></CardHeader>
+      <CardHeader><CardTitle>RESULTS ({data.length})</CardTitle></CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
           <table className="w-full">

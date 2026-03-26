@@ -10,7 +10,7 @@ export function HistoryPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-terminal-green text-glow">Analysis History</h1>
+        <h1 className="text-3xl font-bold text-terminal-green text-glow terminal-prompt">ANALYSIS HISTORY</h1>
         <FilterBar activeFilter={verdictFilter} onFilterChange={setVerdictFilter} />
       </div>
 

@@ -7,10 +7,11 @@ const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     <div
       ref={ref}
       className={cn(
-        'rounded-lg border border-terminal-light bg-terminal-dark/50 backdrop-blur-sm',
-        'shadow-lg transition-shadow hover:shadow-glow-green',
+        'rounded-lg border border-terminal-light backdrop-blur-sm transition-shadow duration-300',
+        'hover:shadow-[0_0_20px_rgba(63,185,80,0.3)]',
         className
       )}
+      style={{ backgroundColor: 'rgba(22, 27, 34, 0.5)', boxShadow: '0 4px 6px rgba(0,0,0,0.3)' }}
       {...props}
     />
   )
@@ -28,7 +29,7 @@ const CardTitle = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLHeadingEle
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('text-xl font-semibold text-terminal-green text-glow', className)}
+      className={cn('text-xl font-semibold text-terminal-green text-glow terminal-prompt', className)}
       {...props}
     />
   )

@@ -20,7 +20,7 @@ export default {
         'terminal-muted': '#8b949e',
       },
       fontFamily: {
-        mono: ['Cascadia Code', 'Fira Code', 'Consolas', 'monospace'],
+        mono: ['Courier Prime', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
       },
       boxShadow: {
         'glow-green': '0 0 20px rgba(63, 185, 80, 0.4)',
