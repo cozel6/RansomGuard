@@ -16,45 +16,45 @@
 ### 1.1 Testing Infrastructure
 
 - [x] Create RansomGuard.API.Tests project
-  - [x] Add xUnit, xUnit.runner.visualstudio, Microsoft.NET.Test.Sdk
-  - [x] Add Moq for mocking
-  - [x] Add FluentAssertions for readable assertions
-  - [x] Add project reference to RansomGuard.API
-  - [x] Create sample test to verify setup
+    - [x] Add xUnit, xUnit.runner.visualstudio, Microsoft.NET.Test.Sdk
+    - [x] Add Moq for mocking
+    - [x] Add FluentAssertions for readable assertions
+    - [x] Add project reference to RansomGuard.API
+    - [x] Create sample test to verify setup
 - [x] Add test project to RansomGuard.sln
 - [x] Verify `dotnet test` runs successfully
 
 ### 1.2 Code Quality & Static Analysis ✅ COMPLETE
 
 - [x] Create `.editorconfig` with C# formatting rules
-  - [x] Define indentation (4 spaces)
-  - [x] Set naming conventions (PascalCase for classes, _camelCase for private fields)
-  - [x] Configure bracing style and modern C# patterns
-  - [x] Set severity levels (warning vs error)
+    - [x] Define indentation (4 spaces)
+    - [x] Set naming conventions (PascalCase for classes, \_camelCase for private fields)
+    - [x] Configure bracing style and modern C# patterns
+    - [x] Set severity levels (warning vs error)
 - [x] Create `Directory.Build.props` for solution-wide analyzer configuration
-  - [x] Enable EnforceCodeStyleInBuild
-  - [x] Configure AnalysisLevel=latest-all
-  - [x] Enable all .NET analyzers
-  - [x] Configure security-focused rules
+    - [x] Enable EnforceCodeStyleInBuild
+    - [x] Configure AnalysisLevel=latest-all
+    - [x] Enable all .NET analyzers
+    - [x] Configure security-focused rules
 - [x] Add analyzer packages to RansomGuard.API
-  - [x] SonarAnalyzer.CSharp
-  - [x] SecurityCodeScan.VS2019
+    - [x] SonarAnalyzer.CSharp
+    - [x] SecurityCodeScan.VS2019
 - [x] Verify `dotnet build` shows analyzer suggestions (95 warnings detected)
 - [ ] Fix existing analyzer warnings (optional for production)
 
 ### 1.3 Documentation Structure
 
 - [x] Create `/docs` directory structure
-  - [x] `/docs/research/` - Academic research docs (Romanian)
-  - [x] `/docs/architecture/` - Technical architecture docs (English)
-  - [x] `/docs/api/` - API documentation (auto-generated from Swagger)
+    - [x] `/docs/research/` - Academic research docs (Romanian)
+    - [x] `/docs/architecture/` - Technical architecture docs (English)
+    - [x] `/docs/api/` - API documentation (auto-generated from Swagger)
 - [x] Create `/docs/README.md` with documentation guide
 - [ ] Create research documentation templates
-  - [ ] `/docs/research/01-introduction.md`
-  - [ ] `/docs/research/02-literature-review.md`
-  - [ ] `/docs/research/03-anatomy-attacks.md`
-  - [ ] `/docs/research/04-defense-mechanisms.md`
-  - [ ] `/docs/research/05-implementation-notes.md`
+    - [ ] `/docs/research/01-introduction.md`
+    - [ ] `/docs/research/02-literature-review.md`
+    - [ ] `/docs/research/03-anatomy-attacks.md`
+    - [ ] `/docs/research/04-defense-mechanisms.md`
+    - [ ] `/docs/research/05-implementation-notes.md`
 
 ---
 
@@ -63,34 +63,34 @@
 ### 2.1 File Upload Endpoint
 
 - [x] Create file validation utilities (`Validators/FileValidator.cs`)
-  - [x] Validate file size (max 10MB)
-  - [x] Validate file extension (.exe, .dll whitelist)
-  - [x] Path traversal detection
-  - [x] PE header validation (MZ signature 0x4D5A)
-  - [x] Made FileValidator static class for consistency
+    - [x] Validate file size (max 10MB)
+    - [x] Validate file extension (.exe, .dll whitelist)
+    - [x] Path traversal detection
+    - [x] PE header validation (MZ signature 0x4D5A)
+    - [x] Made FileValidator static class for consistency
 - [x] Add unit tests for validation logic
-  - [x] Test file size validation
-  - [x] Test extension validation
-  - [x] Test path traversal attempts (../../etc/passwd)
-  - [x] Test PE header validation (valid MZ, invalid signatures, null/empty streams)
+    - [x] Test file size validation
+    - [x] Test extension validation
+    - [x] Test path traversal attempts (../../etc/passwd)
+    - [x] Test PE header validation (valid MZ, invalid signatures, null/empty streams)
 - [x] Create `Controllers/FileUploadController.cs`
-  - [x] POST /api/upload endpoint
-  - [x] Accept IFormFile (multipart/form-data)
-  - [x] Call FileValidator.IsValidPEHeaderAsync()
-  - [x] Call FileUploadHelper.SaveUploadedFileAsync() with GUID filename
-  - [x] Store in isolated temp directory
-  - [x] Return upload ID (GUID) with UploadResponse
-  - [x] Log upload events with structured logging
-  - [x] All validations implemented (size, extension, path traversal, PE header)
+    - [x] POST /api/upload endpoint
+    - [x] Accept IFormFile (multipart/form-data)
+    - [x] Call FileValidator.IsValidPEHeaderAsync()
+    - [x] Call FileUploadHelper.SaveUploadedFileAsync() with GUID filename
+    - [x] Store in isolated temp directory
+    - [x] Return upload ID (GUID) with UploadResponse
+    - [x] Log upload events with structured logging
+    - [x] All validations implemented (size, extension, path traversal, PE header)
 - [x] Create `Models/UploadResponse.cs` DTO
 - [x] Create `Models/ErrorResponse.cs` DTO
 - [x] Create `Models/Verdict.cs` enum
 - [x] Create `Services/FileUploadHelper.cs` and `IFileUploadHelper` interface
-  - [x] SaveUploadedFileAsync with GUID filename generation
-  - [x] SHA256 hash calculation with Convert.ToHexStringLower()
-  - [x] DeleteFile cleanup method
-  - [x] Temp directory auto-creation
-  - [x] Comprehensive logging
+    - [x] SaveUploadedFileAsync with GUID filename generation
+    - [x] SHA256 hash calculation with Convert.ToHexStringLower()
+    - [x] DeleteFile cleanup method
+    - [x] Temp directory auto-creation
+    - [x] Comprehensive logging
 - [ ] Test null byte injection (file.exe\0.txt)
 - [x] Add integration test for upload endpoint
 - [x] Create CustomWebApplicationFactory for test database isolation
@@ -101,53 +101,53 @@
 
 - [x] Add `PeNet` NuGet package to RansomGuard.API
 - [x] Create `Services/PEAnalysisService.cs` and `IPEAnalysisService` interface
-  - [x] Implement `AnalyzeFileAsync(string filePath)`
-  - [x] Calculate Shannon entropy with LINQ optimization
-  - [x] Extract PE sections
-  - [x] Extract import table (API calls)
-  - [x] Extract export table
-  - [x] Detect suspicious APIs with Contains() for better matching
-  - [x] Generate risk score (0-100) with C# 12 switch expressions
-  - [x] Modernized with C# 12/13 features (collection expressions, pattern matching)
+    - [x] Implement `AnalyzeFileAsync(string filePath)`
+    - [x] Calculate Shannon entropy with LINQ optimization
+    - [x] Extract PE sections
+    - [x] Extract import table (API calls)
+    - [x] Extract export table
+    - [x] Detect suspicious APIs with Contains() for better matching
+    - [x] Generate risk score (0-100) with C# 12 switch expressions
+    - [x] Modernized with C# 12/13 features (collection expressions, pattern matching)
 - [x] Create `Models/AnalysisResult.cs` DTO
-  - [x] UploadId (Guid)
-  - [x] Filename (string)
-  - [x] Timestamp (DateTime)
-  - [x] RiskScore (int)
-  - [x] Entropy (double)
-  - [x] SuspiciousAPIs (List<string>)
-  - [x] Verdict (Verdict enum)
-  - [x] FileHash (SHA256 string)
+    - [x] UploadId (Guid)
+    - [x] Filename (string)
+    - [x] Timestamp (DateTime)
+    - [x] RiskScore (int)
+    - [x] Entropy (double)
+    - [x] SuspiciousAPIs (List<string>)
+    - [x] Verdict (Verdict enum)
+    - [x] FileHash (SHA256 string)
 - [x] Register service in `Program.cs` DI container
 - [ ] Add unit tests for analysis logic
-  - [ ] Test entropy calculation
-  - [ ] Test suspicious API detection
-  - [ ] Test risk score algorithm
+    - [ ] Test entropy calculation
+    - [ ] Test suspicious API detection
+    - [ ] Test risk score algorithm
 - [ ] Add integration test with demo DLL file
 
 ### 2.3 Database & Persistence
 
 - [x] Add Entity Framework Core packages
-  - [x] Microsoft.EntityFrameworkCore
-  - [x] Microsoft.EntityFrameworkCore.Sqlite
-  - [x] Microsoft.EntityFrameworkCore.Design
+    - [x] Microsoft.EntityFrameworkCore
+    - [x] Microsoft.EntityFrameworkCore.Sqlite
+    - [x] Microsoft.EntityFrameworkCore.Design
 - [x] Create `Data/RansomGuardDbContext.cs`
-  - [x] DbSet<AnalysisResultEntity> AnalysisResults
-  - [x] Configure entity mappings with fluent API
-  - [x] Add indexes for Timestamp and FileHash
-  - [x] Configure SQLite connection string in appsettings.json
+    - [x] DbSet<AnalysisResultEntity> AnalysisResults
+    - [x] Configure entity mappings with fluent API
+    - [x] Add indexes for Timestamp and FileHash
+    - [x] Configure SQLite connection string in appsettings.json
 - [x] Create `Data/Entities/AnalysisResultEntity.cs`
-  - [x] Map from AnalysisResult DTO
-  - [x] Added proper constraints (max length, required fields)
+    - [x] Map from AnalysisResult DTO
+    - [x] Added proper constraints (max length, required fields)
 - [x] Run EF Core migrations
-  - [x] `dotnet ef migrations add InitialCreate`
-  - [x] `dotnet ef database update`
+    - [x] `dotnet ef migrations add InitialCreate`
+    - [x] `dotnet ef database update`
 - [x] Create `Services/AnalysisRepository.cs`
-  - [x] `SaveAnalysisAsync(AnalysisResultEntity entity)`
-  - [x] `GetAnalysisByIdAsync(Guid id)`
-  - [x] `GetRecentAnalysesAsync(int count)`
-  - [x] Added IAnalysisRepository interface
-  - [x] Added logging for save operations
+    - [x] `SaveAnalysisAsync(AnalysisResultEntity entity)`
+    - [x] `GetAnalysisByIdAsync(Guid id)`
+    - [x] `GetRecentAnalysesAsync(int count)`
+    - [x] Added IAnalysisRepository interface
+    - [x] Added logging for save operations
 - [x] Register repository in DI container (Program.cs)
 - [ ] Add unit tests for repository
 - [ ] Add integration test for database operations
@@ -155,8 +155,8 @@
 ### 2.4 Result Retrieval Endpoints
 
 - [x] Create `Controllers/AnalysisController.cs`
-  - [x] GET /Analysis/{id:guid} - Retrieve single result
-  - [x] GET /Analysis/history?count=10 - Recent analyses
+    - [x] GET /Analysis/{id:guid} - Retrieve single result
+    - [x] GET /Analysis/history?count=10 - Recent analyses
 - [x] Add error handling (404 if not found)
 - [ ] Add response caching headers
 - [x] Document endpoints in XML comments
@@ -182,8 +182,8 @@
 - [x] Add comprehensive logging (Serilog)
 - [x] Delete temp files after analysis (FileUploadHelper.DeleteFile)
 - [x] Add end-to-end integration test
-  - [x] Upload file → Analyze → Retrieve result → Verify correctness
-  - [x] 2 integration tests passing in FileUploadIntegrationTests.cs
+    - [x] Upload file → Analyze → Retrieve result → Verify correctness
+    - [x] 2 integration tests passing in FileUploadIntegrationTests.cs
 
 ---
 
@@ -193,17 +193,17 @@
 
 - [ ] Achieve >80% code coverage for Services layer
 - [x] Add coverage reporting with Coverlet
-  - [x] `dotnet add package coverlet.collector`
-  - [ ] Run: `dotnet test /p:CollectCoverage=true`
+    - [x] `dotnet add package coverlet.collector`
+    - [ ] Run: `dotnet test /p:CollectCoverage=true`
 - [ ] Review coverage report and add missing tests
 
 ### 3.2 Security Testing
 
 - [ ] Test all OWASP Top 10 mitigations
-  - [ ] Injection attacks (SQL, path traversal, null byte)
-  - [ ] File upload vulnerabilities
-  - [ ] Insecure deserialization
-  - [ ] Logging failures
+    - [ ] Injection attacks (SQL, path traversal, null byte)
+    - [ ] File upload vulnerabilities
+    - [ ] Insecure deserialization
+    - [ ] Logging failures
 - [ ] Run SecurityCodeScan and fix warnings
 - [ ] Perform manual security review
 
@@ -221,54 +221,54 @@
 ### 4.1 Introduction (Chapter 1)
 
 - [ ] Write `/docs/research/01-introduction.md`
-  - [ ] Ransomware threat landscape
-  - [ ] Global statistics (costs, attack frequency)
-  - [ ] Thesis motivation (why ransomware detection matters)
-  - [ ] RansomGuard project objectives
+    - [ ] Ransomware threat landscape
+    - [ ] Global statistics (costs, attack frequency)
+    - [ ] Thesis motivation (why ransomware detection matters)
+    - [ ] RansomGuard project objectives
 - [ ] Gather statistics from:
-  - [ ] ENISA Threat Landscape 2024
-  - [ ] Verizon DBIR 2024
-  - [ ] Cybersecurity Ventures reports
+    - [ ] ENISA Threat Landscape 2024
+    - [ ] Verizon DBIR 2024
+    - [ ] Cybersecurity Ventures reports
 
 ### 4.2 Literature Review (Chapter 2)
 
 - [ ] Write `/docs/research/02-literature-review.md`
-  - [ ] Ransomware definition
-  - [ ] Classification (crypto-ransomware vs locker-ransomware)
-  - [ ] Encryption algorithms used (AES, RSA)
+    - [ ] Ransomware definition
+    - [ ] Classification (crypto-ransomware vs locker-ransomware)
+    - [ ] Encryption algorithms used (AES, RSA)
 - [ ] Cite academic papers:
-  - [ ] Razaulla et al., "The Age of Ransomware", IEEE Access 2023
-  - [ ] Sgandurra et al., "Automated Dynamic Analysis", arXiv 2016
-  - [ ] Kharraz et al., "Cutting the Gordian Knot", DIMVA 2015
+    - [ ] Razaulla et al., "The Age of Ransomware", IEEE Access 2023
+    - [ ] Sgandurra et al., "Automated Dynamic Analysis", arXiv 2016
+    - [ ] Kharraz et al., "Cutting the Gordian Knot", DIMVA 2015
 
 ### 4.3 Anatomy of Attacks (Chapters 3 & 5)
 
 - [ ] Write `/docs/research/03-anatomy-attacks.md`
-  - [ ] Kill chain (initial access, lateral movement, exfiltration, encryption)
-  - [ ] Case studies: WannaCry, NotPetya, Colonial Pipeline, REvil
-  - [ ] Ransomware-as-a-Service (RaaS)
-  - [ ] Attack automation (cryptoworms, network scanning)
+    - [ ] Kill chain (initial access, lateral movement, exfiltration, encryption)
+    - [ ] Case studies: WannaCry, NotPetya, Colonial Pipeline, REvil
+    - [ ] Ransomware-as-a-Service (RaaS)
+    - [ ] Attack automation (cryptoworms, network scanning)
 - [ ] Include diagrams (Mermaid or PlantUML)
 - [ ] Reference MITRE ATT&CK framework
 
 ### 4.4 Defense Mechanisms (Chapter 6)
 
 - [ ] Write `/docs/research/04-defense-mechanisms.md`
-  - [ ] Prevention (backup, segmentation, Zero Trust)
-  - [ ] Detection (EDR, SIEM, ML-based)
-  - [ ] Response (incident response, recovery)
-  - [ ] Role of AI/ML in detection
+    - [ ] Prevention (backup, segmentation, Zero Trust)
+    - [ ] Detection (EDR, SIEM, ML-based)
+    - [ ] Response (incident response, recovery)
+    - [ ] Role of AI/ML in detection
 - [ ] Compare static vs dynamic analysis
 - [ ] Discuss ML approaches (Random Forest, XGBoost, Neural Networks)
 
 ### 4.5 Implementation Notes (Chapter 7)
 
 - [ ] Write `/docs/research/05-implementation-notes.md`
-  - [ ] Why .NET for backend? (performance, type safety, ecosystem)
-  - [ ] Why Python for ML? (scikit-learn, PyTorch, rich ecosystem)
-  - [ ] Why SQLite? (lightweight, embedded, sufficient for demo)
-  - [ ] Clean Architecture rationale
-  - [ ] Security design decisions
+    - [ ] Why .NET for backend? (performance, type safety, ecosystem)
+    - [ ] Why Python for ML? (scikit-learn, PyTorch, rich ecosystem)
+    - [ ] Why SQLite? (lightweight, embedded, sufficient for demo)
+    - [ ] Clean Architecture rationale
+    - [ ] Security design decisions
 - [ ] Document architectural trade-offs
 
 ---
@@ -288,10 +288,10 @@
 ### 5.2 File Upload UI
 
 - [x] Create UploadZone component (`features/upload/components/UploadZone.tsx`)
-  - [x] Drag & drop zone
-  - [x] File selection button
-  - [x] Client-side file validation (`utils/validateFile.ts`)
-  - [x] Upload progress indicator via Spinner component
+    - [x] Drag & drop zone
+    - [x] File selection button
+    - [x] Client-side file validation (`utils/validateFile.ts`)
+    - [x] Upload progress indicator via Spinner component
 - [x] Add error handling and user feedback
 - [x] Create `useFileUpload` hook for upload logic
 - [x] Create `UploadPage` with routing
@@ -299,19 +299,19 @@
 ### 5.3 Results Display
 
 - [x] Create ResultCard component (`features/analysis/components/ResultCard.tsx`)
-  - [x] Display verdict (SAFE / RANSOMWARE) via VerdictBadge
-  - [x] Show risk score with visual indicator via RiskScoreMeter
-  - [x] Show entropy value
-  - [x] List suspicious APIs via SuspiciousAPIList component
-  - [x] Show timestamp
+    - [x] Display verdict (SAFE / RANSOMWARE) via VerdictBadge
+    - [x] Show risk score with visual indicator via RiskScoreMeter
+    - [x] Show entropy value
+    - [x] List suspicious APIs via SuspiciousAPIList component
+    - [x] Show timestamp
 - [x] Create `useAnalysisResult` hook for data fetching
 - [x] Create `ResultPage` with routing
 
 ### 5.4 History Dashboard
 
 - [x] Create HistoryTable component (`features/history/components/HistoryTable.tsx`)
-  - [x] Table of recent analyses
-  - [x] Click to view details
+    - [x] Table of recent analyses
+    - [x] Click to view details
 - [x] Add FilterBar component for filtering
 - [x] Create `useHistoryData` hook
 - [x] Create `HistoryPage` with routing
@@ -331,16 +331,15 @@
 
 ## Phase 6: ML Integration ⏳ IN PROGRESS
 
-> **Abordare aleasă: EMBER2024 pre-antrenat** (Opțiunea A din CLAUDE.md)
-> Ghid complet de implementare: `ML_IMPLEMENTATION_GUIDE.md`
+> **Alternative: EMBER2024**
 
 ### 6.1 ML Service Setup
 
 - [ ] Creare director `ml-service/` cu structura din ghid
 - [ ] Creare Python virtual environment (Python 3.11+)
 - [ ] Creare `requirements.txt` și instalare dependențe de bază
-  - [ ] fastapi, uvicorn, pydantic, pydantic-settings
-  - [ ] lightgbm, numpy, pefile, huggingface-hub
+    - [ ] fastapi, uvicorn, pydantic, pydantic-settings
+    - [ ] lightgbm, numpy, pefile, huggingface-hub
 - [ ] Creare `.gitignore` și `.env.example`
 
 ### 6.2 FastAPI Skeleton
@@ -353,8 +352,8 @@
 ### 6.3 Pydantic Schemas
 
 - [ ] Creare `app/schemas.py`
-  - [ ] `PredictResponse` (prediction, confidence, model_version, raw_score)
-  - [ ] `HealthResponse`
+    - [ ] `PredictResponse` (prediction, confidence, model_version, raw_score)
+    - [ ] `HealthResponse`
 
 ### 6.4 Download Model EMBER2024
 
@@ -367,35 +366,35 @@
 ### 6.5 Feature Extraction + Inferență
 
 - [ ] Creare `app/predictor.py`
-  - [ ] `load_model()` cu lazy singleton
-  - [ ] `predict_from_bytes(file_bytes, filename)` cu thrember + LightGBM
-  - [ ] Mapare scor → verdict: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
+    - [ ] `load_model()` cu lazy singleton
+    - [ ] `predict_from_bytes(file_bytes, filename)` cu thrember + LightGBM
+    - [ ] Mapare scor → verdict: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
 
 ### 6.6 Predict Endpoint
 
 - [ ] Creare `app/routers/predict.py` (POST /predict  file upload multipart)
-  - [ ] Validare extensie (.exe, .dll)
-  - [ ] Validare dimensiune (max 10MB)
-  - [ ] Validare PE magic bytes (MZ)
+    - [ ] Validare extensie (.exe, .dll)
+    - [ ] Validare dimensiune (max 10MB)
+    - [ ] Validare PE magic bytes (MZ)
 - [ ] Actualizare `app/main.py` cu predict router + preload model la startup
 - [ ] Verificare: `curl -X POST http://localhost:8000/predict -F "file=@sample.exe"`
 
 ### 6.7 Backend .NET ↔ ML Service
 
 - [ ] Adăugare câmpuri `MlConfidence` și `MlModelVersion` în:
-  - [ ] `Models/AnalysisResult.cs`
-  - [ ] `Data/Entities/AnalysisResultEntity.cs`
-  - [ ] `Models/UploadResponse.cs`
+    - [ ] `Models/AnalysisResult.cs`
+    - [ ] `Data/Entities/AnalysisResultEntity.cs`
+    - [ ] `Models/UploadResponse.cs`
 - [ ] Rulare EF migration: `dotnet ef migrations add AddMlConfidence && dotnet ef database update`
 - [ ] Creare `Services/IMlServiceClient.cs` (interfață + record `MlPrediction`)
 - [ ] Creare `Services/MlServiceClient.cs` (trimite fișier de pe disc via `filePath`)
 - [ ] Înregistrare `AddHttpClient<IMlServiceClient, MlServiceClient>` în `Program.cs`
 - [ ] Adăugare `"MlService": { "BaseUrl": "http://localhost:8000" }` în `appsettings.Development.json`
 - [ ] Actualizare `FileUploadController.cs`:
-  - [ ] Injectare `IMlServiceClient` în constructor
-  - [ ] Apel `PredictAsync(filePath, file.FileName)` după `AnalyzeFileAsync` și înainte de `DeleteFile`
-  - [ ] Suprascrie verdict cu predicția ML dacă serviciul e disponibil
-  - [ ] Include `MlConfidence` și `MlModelVersion` în entity și response
+    - [ ] Injectare `IMlServiceClient` în constructor
+    - [ ] Apel `PredictAsync(filePath, file.FileName)` după `AnalyzeFileAsync` și înainte de `DeleteFile`
+    - [ ] Suprascrie verdict cu predicția ML dacă serviciul e disponibil
+    - [ ] Include `MlConfidence` și `MlModelVersion` în entity și response
 
 ### 6.8 Verificare End-to-End
 
@@ -418,9 +417,9 @@
 ### 7.2 GitHub Actions CI/CD
 
 - [ ] Create `.github/workflows/backend-ci.yml`
-  - [ ] Run tests on every PR
-  - [ ] Run static analyzers
-  - [ ] Build artifacts
+    - [ ] Run tests on every PR
+    - [ ] Run static analyzers
+    - [ ] Build artifacts
 - [ ] Create `.github/workflows/frontend-ci.yml`
 - [ ] Add deployment workflow (optional)
 
@@ -439,9 +438,9 @@
 
 - [ ] Create C# project for demo DLL
 - [ ] Import cryptographic APIs (without calling them)
-  - [ ] CryptEncrypt
-  - [ ] BCryptEncrypt
-  - [ ] CryptGenRandom
+    - [ ] CryptEncrypt
+    - [ ] BCryptEncrypt
+    - [ ] CryptGenRandom
 - [ ] Add high entropy data section
 - [ ] Use non-standard PE section names
 - [ ] Strip debug symbols
