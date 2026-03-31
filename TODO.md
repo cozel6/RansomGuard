@@ -329,55 +329,80 @@
 
 ---
 
-## Phase 6: ML Integration (Deferred)
+## Phase 6: ML Integration ⏳ IN PROGRESS
 
-### 6.1 Dataset Preparation
+> **Abordare aleasă: EMBER2024 pre-antrenat** (Opțiunea A din CLAUDE.md)
+> Ghid complet de implementare: `ML_IMPLEMENTATION_GUIDE.md`
 
-- [ ] Research Kaggle datasets
-  - [ ] Microsoft Malware Classification (BIG2015)
-  - [ ] Ransomware Detection Dataset
-  - [ ] CIC-MalMem-2022
-- [ ] Download and explore selected dataset
-- [ ] Document dataset characteristics in `/docs/research/06-ml-implementation.md`
+### 6.1 ML Service Setup
 
-### 6.2 Feature Engineering
+- [ ] Creare director `ml-service/` cu structura din ghid
+- [ ] Creare Python virtual environment (Python 3.11+)
+- [ ] Creare `requirements.txt` și instalare dependențe de bază
+  - [ ] fastapi, uvicorn, pydantic, pydantic-settings
+  - [ ] lightgbm, numpy, pefile, huggingface-hub
+- [ ] Creare `.gitignore` și `.env.example`
 
-- [ ] Define feature vector
-  - [ ] File entropy
-  - [ ] PE section count and names
-  - [ ] Import table size and suspicious API count
-  - [ ] Export table size
-  - [ ] File size
-  - [ ] Timestamp anomalies
-- [ ] Implement feature extraction pipeline
-- [ ] Document feature engineering decisions
+### 6.2 FastAPI Skeleton
 
-### 6.3 Model Training
+- [ ] Creare `app/config.py` (Settings cu pydantic-settings)
+- [ ] Creare `app/routers/health.py` (GET /health)
+- [ ] Creare `app/main.py` cu CORS middleware
+- [ ] Verificare: `uvicorn app.main:app --reload --port 8000` → `/health` răspunde
 
-- [ ] Create `/ml` directory
-- [ ] Setup Python virtual environment
-- [ ] Install dependencies (scikit-learn, pandas, numpy)
-- [ ] Train Random Forest model (baseline)
-- [ ] Train XGBoost model (optimized)
-- [ ] Evaluate models (Accuracy, Precision, Recall, F1)
-- [ ] Document evaluation metrics in research docs
+### 6.3 Pydantic Schemas
 
-### 6.4 Python ML Service
+- [ ] Creare `app/schemas.py`
+  - [ ] `PredictResponse` (prediction, confidence, model_version, raw_score)
+  - [ ] `HealthResponse`
 
-- [ ] Create FastAPI service
-  - [ ] POST /predict endpoint
-  - [ ] Load trained model
-  - [ ] Accept feature vector JSON
-  - [ ] Return prediction and confidence score
-- [ ] Add model versioning
-- [ ] Add logging
+### 6.4 Download Model EMBER2024
 
-### 6.5 .NET ↔ Python Integration
+- [ ] Instalare thrember din GitHub: `pip install git+https://github.com/FutureComputing4AI/EMBER2024.git`
+- [ ] Creare `scripts/download_model.py` (descărcare `Win32_malicious.txt` de pe Hugging Face)
+- [ ] Rulare script: `python scripts/download_model.py`
+- [ ] Verificare model salvat în `models/Win32_malicious.txt`
+- [ ] Actualizare `.env` cu `MODEL_PATH=./models/Win32_malicious.txt`
 
-- [ ] Add HttpClient in `Services/MLServiceClient.cs`
-- [ ] Call Python service from PE Analysis workflow
-- [ ] Add timeout and retry logic
-- [ ] Add fallback to heuristic-only analysis if ML service unavailable
+### 6.5 Feature Extraction + Inferență
+
+- [ ] Creare `app/predictor.py`
+  - [ ] `load_model()` cu lazy singleton
+  - [ ] `predict_from_bytes(file_bytes, filename)` cu thrember + LightGBM
+  - [ ] Mapare scor → verdict: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
+
+### 6.6 Predict Endpoint
+
+- [ ] Creare `app/routers/predict.py` (POST /predict — file upload multipart)
+  - [ ] Validare extensie (.exe, .dll)
+  - [ ] Validare dimensiune (max 10MB)
+  - [ ] Validare PE magic bytes (MZ)
+- [ ] Actualizare `app/main.py` cu predict router + preload model la startup
+- [ ] Verificare: `curl -X POST http://localhost:8000/predict -F "file=@sample.exe"`
+
+### 6.7 Backend .NET ↔ ML Service
+
+- [ ] Adăugare câmpuri `MlConfidence` și `MlModelVersion` în:
+  - [ ] `Models/AnalysisResult.cs`
+  - [ ] `Data/Entities/AnalysisResultEntity.cs`
+  - [ ] `Models/UploadResponse.cs`
+- [ ] Rulare EF migration: `dotnet ef migrations add AddMlConfidence && dotnet ef database update`
+- [ ] Creare `Services/IMlServiceClient.cs` (interfață + record `MlPrediction`)
+- [ ] Creare `Services/MlServiceClient.cs` (trimite fișier de pe disc via `filePath`)
+- [ ] Înregistrare `AddHttpClient<IMlServiceClient, MlServiceClient>` în `Program.cs`
+- [ ] Adăugare `"MlService": { "BaseUrl": "http://localhost:8000" }` în `appsettings.Development.json`
+- [ ] Actualizare `FileUploadController.cs`:
+  - [ ] Injectare `IMlServiceClient` în constructor
+  - [ ] Apel `PredictAsync(filePath, file.FileName)` după `AnalyzeFileAsync` și înainte de `DeleteFile`
+  - [ ] Suprascrie verdict cu predicția ML dacă serviciul e disponibil
+  - [ ] Include `MlConfidence` și `MlModelVersion` în entity și response
+
+### 6.8 Verificare End-to-End
+
+- [ ] Pornire toate serviciile (backend + ml-service + frontend)
+- [ ] Test upload fișier `.exe` real prin frontend
+- [ ] Verificare verdict ML în răspuns și în baza de date
+- [ ] Verificare fallback: oprire ml-service → upload încă funcționează cu verdict static
 
 ---
 
