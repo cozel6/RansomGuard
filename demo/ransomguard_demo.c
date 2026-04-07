@@ -83,12 +83,24 @@ extern NTSTATUS WINAPI BCryptGenRandom(
     BCRYPT_ALG_HANDLE hAlgoritm,
     PUCHAR pbBuffer,
     ULONG cbBuffer,
-    ULONG dwFlags)
+    ULONG dwFlags);
 
-    /* --- File operations (deletion / overwrite indicators) --- */
-    /*
-     * DeleteFileW  deletes a file from the filesystem (Unicode version).
-     *   lpFileName : full path to the file to delete (wide-char string)
-     * Ransomware deletes original plaintext files after encrypting them,
-     * or deletes shadow copies / backups to prevent recovery.
-     */
+/*
+ * DeleteFileW  deletes a file from the filesystem (Unicode version).
+ * lpFileName : full path to the file to delete (wide-char string)
+ * Ransomware deletes original plaintext files after encrypting them,
+ * or deletes shadow copies / backups to prevent recovery.
+ */
+
+extern BOOL WINAPI DeleteFileW(LPCWSTR lpFileName);
+/*
+ * MoveFileExW  moves or renames a file, with optional flags (Unicode version).
+ *   lpExistingFileName : path to the source file
+ *   lpNewFileName      : path to the destination (NULL to delete the file)
+ *   dwFlags            : e.g. MOVEFILE_REPLACE_EXISTING, MOVEFILE_DELAY_UNTIL_REBOOT
+ * Ransomware uses this to rename encrypted files (e.g. "document.docx" → "document.docx.locked").
+ */
+extern BOOL WINAPI MoveFileExW(LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName, DWORD dwFlags);
+
+/* --- Process / memory (injection indicators) --- */
+// TODO
