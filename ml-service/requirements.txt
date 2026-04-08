@@ -11,8 +11,10 @@ lightgbm==4.5.0
 numpy==2.1.3
 
 # PE feature extraction (EMBER2024)
-# thrember se instalează din GitHub  vezi Phase 4
+# thrember: pip install git+https://github.com/FutureComputing4AI/EMBER2024.git
 pefile==2023.2.7
+python-multipart==0.0.24
+signify==0.7.1
 
 # Hugging Face (pentru download model)
 huggingface-hub==0.26.2
