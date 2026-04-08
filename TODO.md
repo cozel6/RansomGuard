@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-03-26
+**Last updated:** 2026-04-08
 
 ## How to Use This Document
 
@@ -335,49 +335,51 @@
 
 ### 6.1 ML Service Setup
 
-- [ ] Creare director `ml-service/` cu structura din ghid
-- [ ] Creare Python virtual environment (Python 3.11+)
-- [ ] Creare `requirements.txt` și instalare dependențe de bază
-    - [ ] fastapi, uvicorn, pydantic, pydantic-settings
-    - [ ] lightgbm, numpy, pefile, huggingface-hub
-- [ ] Creare `.gitignore` și `.env.example`
+- [x] Creare director `ml-service/` cu structura din ghid
+- [x] Creare Python virtual environment (Python 3.11+)
+- [x] Creare `requirements.txt` și instalare dependențe de bază
+    - [x] fastapi, uvicorn, pydantic, pydantic-settings
+    - [x] lightgbm, numpy, pefile, huggingface-hub
+    - [x] python-multipart (necesar pentru file upload în FastAPI)
+    - [x] signify==0.7.1 (compatibil cu thrember)
+- [x] Creare `.gitignore` și `.env.example`
 
 ### 6.2 FastAPI Skeleton
 
-- [ ] Creare `app/config.py` (Settings cu pydantic-settings)
-- [ ] Creare `app/routers/health.py` (GET /health)
-- [ ] Creare `app/main.py` cu CORS middleware
-- [ ] Verificare: `uvicorn app.main:app --reload --port 8000` → `/health` răspunde
+- [x] Creare `app/config.py` (Settings cu pydantic-settings)
+- [x] Creare `app/routers/health.py` (GET /health)
+- [x] Creare `app/main.py` cu CORS middleware
+- [x] Verificare: `uvicorn app.main:app --reload --port 8000` → `/health` răspunde
 
 ### 6.3 Pydantic Schemas
 
-- [ ] Creare `app/schemas.py`
-    - [ ] `PredictResponse` (prediction, confidence, model_version, raw_score)
-    - [ ] `HealthResponse`
+- [x] Creare `app/schemas.py`
+    - [x] `PredictResponse` (prediction, confidence, model_version, raw_score)
+    - [x] `HealthResponse`
 
 ### 6.4 Download Model EMBER2024
 
-- [ ] Instalare thrember din GitHub: `pip install git+https://github.com/FutureComputing4AI/EMBER2024.git`
-- [ ] Creare `scripts/download_model.py` (descărcare `Win32_malicious.txt` de pe Hugging Face)
-- [ ] Rulare script: `python scripts/download_model.py`
-- [ ] Verificare model salvat în `models/Win32_malicious.txt`
-- [ ] Actualizare `.env` cu `MODEL_PATH=./models/Win32_malicious.txt`
+- [x] Instalare thrember din GitHub: `pip install git+https://github.com/FutureComputing4AI/EMBER2024.git`
+- [x] Creare `scripts/download_model.py` (descărcare `EMBER2024_PE.model` de pe Hugging Face)
+- [x] Rulare script: `python scripts/download_model.py`
+- [x] Verificare model salvat în `models/EMBER2024_PE.model`
+- [x] Actualizare `.env` cu `MODEL_PATH=./models/EMBER2024_PE.model`
 
 ### 6.5 Feature Extraction + Inferență
 
-- [ ] Creare `app/predictor.py`
-    - [ ] `load_model()` cu lazy singleton
-    - [ ] `predict_from_bytes(file_bytes, filename)` cu thrember + LightGBM
-    - [ ] Mapare scor → verdict: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
+- [x] Creare `app/predictor.py`
+    - [x] `load_model()` cu lazy singleton (global `_model`)
+    - [x] `predict_from_bytes(file_bytes, filename)` cu `thrember.PEFeatureExtractor` + LightGBM
+    - [x] Mapare scor → verdict: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
 
 ### 6.6 Predict Endpoint
 
-- [ ] Creare `app/routers/predict.py` (POST /predict  file upload multipart)
-    - [ ] Validare extensie (.exe, .dll)
-    - [ ] Validare dimensiune (max 10MB)
-    - [ ] Validare PE magic bytes (MZ)
-- [ ] Actualizare `app/main.py` cu predict router + preload model la startup
-- [ ] Verificare: `curl -X POST http://localhost:8000/predict -F "file=@sample.exe"`
+- [x] Creare `app/routers/predict.py` (POST /predict  file upload multipart)
+    - [x] Validare extensie (.exe, .dll)
+    - [x] Validare dimensiune (max 10MB)
+    - [x] Validare PE magic bytes (MZ)
+- [x] Actualizare `app/main.py` cu predict router + preload model la startup
+- [x] Verificare: `curl -X POST http://localhost:8000/predict -F "file=@demo/ransomguard_demo.dll"` → răspunde cu verdict
 
 ### 6.7 Backend .NET ↔ ML Service
 

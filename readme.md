@@ -17,12 +17,13 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 | Unit Tests        | 🟢 Complete       | 32 tests |
 | Integration Tests | 🟡 Partial        | 2 tests  |
 | Frontend          | 🟢 Complete       | 100%     |
-| ML Service        | 🟡 In Progress    | 0%       |
+| ML Service        | 🟢 Complete       | 100%     |
+| Backend ↔ ML Integration | 🔴 Not Started | 0%  |
 | Research Docs     | 🔴 Not Started    | 0%       |
 | Docker Deployment | ⚪ Future         | 0%       |
 
-**Current Status:** Backend and Frontend complete, ML Service next
-**Last Updated:** 2026-03-26
+**Current Status:** Backend, Frontend și ML Service complete. Urmează integrarea backend .NET ↔ ML Service.
+**Last Updated:** 2026-04-08
 
 ## Documentation
 
@@ -42,7 +43,9 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 ### Prerequisites
 
 - .NET 10.0 SDK
-- Visual Studio Code or Visual Studio 2022
+- Node.js 18+
+- Python 3.11+
+- Homebrew (macOS)  necesar pentru `libomp` (LightGBM)
 
 ### Setup
 
@@ -51,21 +54,59 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 git clone <repo-url>
 cd RansomGuard
 
-# Install dependencies
+# Backend
 cd backend/RansomGuard.API
 dotnet restore
-
-# Run backend
 dotnet watch
 ```
 
 Visit: **http://localhost:5087/swagger**
+
+```bash
+# Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+Visit: **http://localhost:5173**
+
+```bash
+# ML Service
+cd ml-service
+
+# macOS: instalează libomp (necesar pentru LightGBM)
+brew install libomp
+
+# Setup virtual environment
+python3.11 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install git+https://github.com/FutureComputing4AI/EMBER2024.git
+pip install signify==0.7.1
+
+# Descarcă modelul EMBER2024 (~3.7MB)
+python scripts/download_model.py
+
+# Pornește serviciul
+uvicorn app.main:app --reload --port 8000
+```
+
+Visit: **http://localhost:8000/health**
 
 ### Running Tests
 
 ```bash
 cd backend/RansomGuard.API.Tests
 dotnet test
+```
+
+### Test ML Service
+
+```bash
+curl -X POST http://localhost:8000/predict \
+  -F "file=@demo/ransomguard_demo.dll"
+# Răspuns așteptat: {"prediction":"suspicious","confidence":0.616,...}
 ```
 
 ## Getting Started
