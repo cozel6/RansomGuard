@@ -61,6 +61,14 @@ try
                   .AllowAnyHeader();
         });
     });
+    // Add ML service client
+    builder.Services.AddHttpClient<IMlServiceClient, MlServiceClient>(client =>
+    {
+        var baseUrl = builder.Configuration["MlService:BaseUrl"] ?? "http://localhost:8000";
+        client.BaseAddress = new Uri(baseUrl);
+        client.Timeout = TimeSpan.FromSeconds(30);
+    });
+
 
     var app = builder.Build();
 

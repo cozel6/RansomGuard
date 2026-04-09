@@ -21,5 +21,9 @@ namespace RansomGuard.API.Data.Entities
         public int SectionCount { get; set; }
         public int ImportCount { get; set; }
         public int ExportCount { get; set; }
+
+        // ML Service results
+        public double? MlConfidence { get; set; }
+        public string? MlModelVersion { get; set; }
     }
 }

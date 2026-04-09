@@ -7,7 +7,7 @@ using RansomGuard.API.Validators;
 namespace RansomGuard.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class FileUploadController : ControllerBase
     {
         private readonly IFileUploadHelper _fileHelper;
@@ -16,16 +16,21 @@ namespace RansomGuard.API.Controllers
 
         private readonly IAnalysisRepository _repository;
 
+        private readonly IMlServiceClient _mlClient;
+
         public FileUploadController(
             IFileUploadHelper fileHelper,
             IPEAnalysisService analysisService,
             IAnalysisRepository repository,
-            ILogger<FileUploadController> logger)
+            ILogger<FileUploadController> logger,
+            IMlServiceClient mlClient)
         {
             _fileHelper = fileHelper;
             _repository = repository;
             _analysisService = analysisService;
             _logger = logger;
+            _mlClient = mlClient;
+
         }
 
         /// <summary>
@@ -115,7 +120,29 @@ namespace RansomGuard.API.Controllers
                 });
             }
 
-#pragma warning disable S1135 // Track uses of "TODO" tags
+            // ML prediction (non-blocking  falls back to static verdict)
+            var mlPrediction = await _mlClient.PredictAsync(filePath, file.FileName);
+
+            if (mlPrediction != null)
+            {
+                analysisResult.Verdict = mlPrediction.Prediction.ToUpperInvariant() switch
+                {
+                    "RANSOMWARE" => Verdict.Ransomware,
+                    "SUSPICIOUS" => Verdict.Suspicious,
+                    _ => Verdict.Safe
+                };
+                analysisResult.MlConfidence = mlPrediction.Confidence;
+                analysisResult.MlModelVersion = mlPrediction.ModelVersion;
+
+                _logger.LogInformation(
+                    "ML verdict for {Filename}: {Prediction} (confidence: {Confidence:F3}, model: {Model})",
+                    file.FileName, mlPrediction.Prediction, mlPrediction.Confidence, mlPrediction.ModelVersion);
+            }
+            else
+            {
+                _logger.LogWarning("ML service unavailable  using static verdict for {Filename}", file.FileName);
+            }
+
             var entity = new Data.Entities.AnalysisResultEntity
             {
                 Id = analysisResult.UploadId,
@@ -128,9 +155,10 @@ namespace RansomGuard.API.Controllers
                 Verdict = analysisResult.Verdict.ToString(),
                 SectionCount = analysisResult.SectionCount,
                 ImportCount = analysisResult.ImportCount,
-                ExportCount = analysisResult.ExportCount
+                ExportCount = analysisResult.ExportCount,
+                MlConfidence = analysisResult.MlConfidence,
+                MlModelVersion = analysisResult.MlModelVersion
             };
-#pragma warning restore S1135 // Track uses of "TODO" tags
 
             await _repository.SaveAnalysisAsync(entity);
 
@@ -138,15 +166,16 @@ namespace RansomGuard.API.Controllers
             _fileHelper.DeleteFile(filePath);
 
             _logger.LogInformation("Analysis complete: {UploadId}, Verdict: {Verdict}",
-    analysisResult.UploadId, analysisResult.Verdict);
-
+                analysisResult.UploadId, analysisResult.Verdict);
 
             return Ok(new UploadResponse
             {
                 UploadId = analysisResult.UploadId,
                 Message = $"Analysis complete: {analysisResult.Verdict}",
                 RiskScore = analysisResult.RiskScore,
-                Verdict = analysisResult.Verdict
+                Verdict = analysisResult.Verdict,
+                MlConfidence = analysisResult.MlConfidence,
+                MlModelVersion = analysisResult.MlModelVersion
             });
         }
     }

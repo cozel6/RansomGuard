@@ -9,5 +9,9 @@ namespace RansomGuard.API.Models
         public int RiskScore { get; set; }
 
         public Verdict Verdict { get; set; }
+
+        // ML Service results
+        public double? MlConfidence { get; set; }
+        public string? MlModelVersion { get; set; }
     }
 }

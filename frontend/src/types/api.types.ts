@@ -10,6 +10,10 @@ export enum Verdict {
 export interface UploadResponse {
   uploadId: string
   message: string
+  riskScore: number
+  verdict: Verdict
+  mlConfidence?: number
+  mlModelVersion?: string
 }
 
 export interface AnalysisResult {
@@ -21,6 +25,8 @@ export interface AnalysisResult {
   suspiciousAPIs: string[]
   verdict: Verdict
   fileHash: string
+  mlConfidence?: number
+  mlModelVersion?: string
 }
 
 export interface ErrorResponse {

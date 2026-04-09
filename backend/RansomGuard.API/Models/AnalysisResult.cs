@@ -16,5 +16,10 @@ namespace RansomGuard.API.Models
         public List<string> SuspiciousAPIs { get; set; } = [];
         public Verdict Verdict { get; set; }
         public string FileHash { get; set; } = string.Empty;
+
+        // ML Service results (null when ML service is unavailable)
+        public double? MlConfidence { get; set; }
+        public string? MlModelVersion { get; set; }
+
     }
 }
