@@ -9,20 +9,20 @@ This project was developed as part of a research paper on **"Ransomware Evolutio
 
 ## Project Status
 
-| Component         | Status            | Progress |
-| ----------------- | ----------------- | -------- |
-| Backend API       | 🟢 Complete       | ~95%     |
-| Static Analysis   | 🟢 Complete       | 100%     |
-| Database          | 🟢 Complete       | 100%     |
-| Unit Tests        | 🟢 Complete       | 32 tests |
-| Integration Tests | 🟡 Partial        | 2 tests  |
-| Frontend          | 🟢 Complete       | 100%     |
-| ML Service        | 🟢 Complete       | 100%     |
-| Backend ↔ ML Integration | 🔴 Not Started | 0%  |
-| Research Docs     | 🔴 Not Started    | 0%       |
-| Docker Deployment | ⚪ Future         | 0%       |
+| Component                | Status         | Progress |
+| ------------------------ | -------------- | -------- |
+| Backend API              | 🟢 Complete    | ~95%     |
+| Static Analysis          | 🟢 Complete    | 100%     |
+| Database                 | 🟢 Complete    | 100%     |
+| Unit Tests               | 🟢 Complete    | 32 tests |
+| Integration Tests        | 🟡 Partial     | 2 tests  |
+| Frontend                 | 🟢 Complete    | 100%     |
+| ML Service               | 🟢 Complete    | 100%     |
+| Backend ↔ ML Integration | 🔴 Not Started | 0%       |
+| Research Docs            | 🔴 Not Started | 0%       |
+| Docker Deployment        | ⚪ Future      | 0%       |
 
-**Current Status:** Backend, Frontend și ML Service complete. Urmează integrarea backend .NET ↔ ML Service.
+**Current Status:** Backend, Frontend și ML Service complete. Next steps Backend ↔.NET ↔ ML Service.
 **Last Updated:** 2026-04-08
 
 ## Documentation
