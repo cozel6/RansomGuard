@@ -63,12 +63,12 @@ public class AnalysisController : ControllerBase
     /// <returns>List of recent analyses</returns>
     [HttpGet("history")]
     [ProducesResponseType(typeof(List<AnalysisResult>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetHistory([FromQuery] int count = 10)
+    public async Task<IActionResult> GetHistory([FromQuery] int count = 10, [FromQuery] string? verdictFilter = null)
     {
         // Cap at 100 to prevent abuse
         count = Math.Min(count, 100);
 
-        var entities = await _repository.GetRecentAnalysesAsync(count);
+        var entities = await _repository.GetRecentAnalysesAsync(count, verdictFilter);
 
         var results = entities.Select(e => new AnalysisResult
         {

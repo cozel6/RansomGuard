@@ -33,7 +33,7 @@ export function RiskScoreMeter({ score, verdict }: RiskScoreMeterProps) {
         {verdict === Verdict.Safe && 'Low Risk'}
         {verdict === Verdict.Suspicious && 'Medium Risk'}
         {verdict === Verdict.Ransomware && 'High Risk'}
-        {verdict === Verdict.Unknown && 'Unknown Risk'}
+        {verdict == null && 'Unknown Risk'}
       </p>
     </div>
   )

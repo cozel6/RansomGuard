@@ -8,7 +8,7 @@ namespace RansomGuard.API.Services
     {
         Task<Guid> SaveAnalysisAsync(AnalysisResultEntity entity);
         Task<AnalysisResultEntity?> GetAnalysisByIdAsync(Guid id);
-        Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count);
+        Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count, string? verdictFilter = null);
     }
 
     public class AnalysisRepository : IAnalysisRepository
@@ -28,13 +28,18 @@ namespace RansomGuard.API.Services
             .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count)
+        public async Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count, string? verdictFilter = null)
         {
-            return await _context.AnalysisResults
-                .AsNoTracking()
+            var query = _context.AnalysisResults.AsNoTracking();
+            if (!string.IsNullOrEmpty(verdictFilter))
+            {
+                query = query.Where(a => a.Verdict == verdictFilter);
+            }
+            return await query
                 .OrderByDescending(a => a.Timestamp)
                 .Take(count)
                 .ToListAsync();
+
         }
 
         public async Task<Guid> SaveAnalysisAsync(AnalysisResultEntity entity)

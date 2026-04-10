@@ -1,11 +1,12 @@
 // scr/services/api/analysis.api.ts
 
 import apiClient from "./client";
-import type {
-    UploadResponse,
-    AnalysisResult,
-    AnalysisHistoryItem,
-    HistoryParams,
+import {
+    type UploadResponse,
+    type AnalysisResult,
+    type AnalysisHistoryItem,
+    type HistoryParams,
+    Verdict,
 } from '@/types/api.types';
   
 export const uploadFile = async (file: File): Promise<UploadResponse> => {
@@ -30,7 +31,7 @@ export const getAnalysisResult = async (uploadId: string): Promise<AnalysisResul
     const response = await apiClient.get<AnalysisHistoryItem[]>('/api/analysis/history', {
       params: {
         count: params.count || 10,
-        verdictFilter: params.verdictFilter ?? undefined,
+        verdictFilter: params.verdictFilter != null ? Verdict[params.verdictFilter]: undefined
       },
     })
     return response.data
