@@ -42,7 +42,7 @@ export function HistoryTable({ data }: HistoryTableProps) {
                 <tr key={item.uploadId} className="border-b border-terminal-light/50 hover:bg-terminal-gray/30 transition-colors">
                   <td className="p-4"><code className="text-terminal-cyan">{item.filename}</code></td>
                   <td className="p-4"><VerdictBadge verdict={item.verdict} /></td>
-                  <td className="p-4"><span className={cn('font-bold', getRiskScoreColor(item.riskScore))}>{item.riskScore}</span></td>
+                  <td className="p-4"><span className={cn('font-bold', getRiskScoreColor(item.verdict))}>{item.riskScore}</span></td>
                   <td className="p-4 text-terminal-muted text-sm">{formatTimestamp(item.timestamp)}</td>
                   <td className="p-4">
                     <Button variant="outline" size="sm" asChild>

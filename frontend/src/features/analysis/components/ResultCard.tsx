@@ -22,7 +22,7 @@ export function ResultCard({ result }: ResultCardProps) {
         </div>
 
         <div className="flex justify-center py-4">
-          <RiskScoreMeter score={result.riskScore} />
+          <RiskScoreMeter score={result.riskScore} verdict={result.verdict} />
         </div>
 
         <div className="space-y-3 border-t border-terminal-light pt-4">

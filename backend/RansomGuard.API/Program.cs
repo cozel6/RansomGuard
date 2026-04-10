@@ -72,6 +72,13 @@ try
 
     var app = builder.Build();
 
+    // Apply pending migrations
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<RansomGuardDbContext>();
+        await db.Database.MigrateAsync();
+    }
+
     // Configure middleware
     if (app.Environment.IsDevelopment())
     {

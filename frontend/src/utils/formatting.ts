@@ -12,10 +12,13 @@ export function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-export function getRiskScoreColor(score: number): string {
-  if (score < 30) return 'text-terminal-green'
-  if (score < 70) return 'text-terminal-yellow'
-  return 'text-terminal-red'
+export function getRiskScoreColor(verdict: Verdict): string {
+  switch (verdict) {
+    case Verdict.Safe: return 'text-terminal-green'
+    case Verdict.Suspicious: return 'text-terminal-yellow'
+    case Verdict.Ransomware: return 'text-terminal-red'
+    default: return 'text-terminal-muted'
+  }
 }
 
 export function getVerdictLabel(verdict: Verdict): string {
