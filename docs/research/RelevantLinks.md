@@ -57,3 +57,21 @@
 | Title                                                                                                                           | Authors | Year | Link                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------- | ---- | ------------------------------------------------------------------------------------ |
 | Securing the Internet of Things: A Comprehensive Review of Ransomware Attacks, Detection, Countermeasures, and Future Prospects |        | 2025 | [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2773186325000465) |
+
+---
+
+## ML for Detection AND Protection (Pre-Encryption / Real-Time)
+
+| Title                                                                                                  | Authors                   | Year | Link                                                                                                        |
+| ------------------------------------------------------------------------------------------------------ | ------------------------- | ---- | ----------------------------------------------------------------------------------------------------------- |
+| Ransomware and Artificial Intelligence: A Comprehensive Systematic Review of Reviews                   |                          | 2025 | [PDF (arXiv)](https://arxiv.org/pdf/2603.13734)                                                             |
+| Ransomware Detection Using Machine Learning: A Survey                                                  |                          | 2023 | [MDPI](https://www.mdpi.com/2504-2289/7/3/143)                                                              |
+| Ransomware Detection Using the Dynamic Analysis and Machine Learning: A Survey and Research Directions | Urooj et al.              | 2022 | [MDPI Applied Sciences](https://www.mdpi.com/2076-3417/12/1/172)                                            |
+| Cryptographic Ransomware Encryption Detection: Survey                                                  | Begovic et al.            | 2023 | [PDF (arXiv)](https://arxiv.org/pdf/2306.12008)                                                             |
+| Crypto-Ransomware Detection Through a Honeyfile-Based Approach with R-Locker                           |                          | 2025 | [MDPI Mathematics](https://www.mdpi.com/2227-7390/13/12/1933)                                               |
+| SHIELD: A Host-Independent Framework for Ransomware Detection using Deep Filesystem Features           |                          | 2025 | [PDF (arXiv)](https://arxiv.org/pdf/2501.16619)                                                             |
+| CanCal: Towards Real-time and Lightweight Ransomware Detection and Response in Industrial Environments |                          | 2024 | [PDF (arXiv)](https://arxiv.org/pdf/2408.16515) · [ACM CCS](https://dl.acm.org/doi/10.1145/3658644.3690269) |
+| Federated Cyber Defense: Privacy-Preserving Ransomware Detection Across Distributed Systems            |                          | 2024 | [PDF (arXiv)](https://arxiv.org/pdf/2511.01583)                                                             |
+| iCNN-LSTM: A Batch-Based Incremental Ransomware Detection System Using Sysmon                          |                          | 2025 | [PDF (arXiv)](https://arxiv.org/pdf/2501.01083)                                                             |
+| A Survey of Machine Learning Algorithms for Detecting Ransomware Encryption Activity                   | Larsen, Noever, MacVittie | 2021 | [PDF (arXiv)](https://arxiv.org/pdf/2110.07636)                                                             |
+| Ransomware Detection Using Machine Learning in the Linux Kernel (eBPF)                                 |                          | 2024 | [PDF (arXiv)](https://arxiv.org/pdf/2409.06452)                                                             |
