@@ -1,46 +1,43 @@
 using RansomGuard.API.Models;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 
-namespace RansomGuard.API.Middlewares
+namespace RansomGuard.API.Middlewares;
+
+public class ErrorHandlingMiddleware
 {
-    public class ErrorHandlingMiddleware
+    private readonly RequestDelegate _next;
+    private readonly ILogger<ErrorHandlingMiddleware> _logger;
+
+    public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlingMiddleware> _logger;
+        _next = next;
+        _logger = logger;
+    }
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unhandled exception occurred");
-                await HandleExceptionAsync(context, ex);
-            }
+            _logger.LogError(ex, "Unhandled exception occurred");
+            await HandleExceptionAsync(context, ex);
         }
+    }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    {
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+        var response = new ErrorResponse
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            var response = new ErrorResponse
-            {
-                Code = "INTERNAL_ERROR",
-                Message = "An error occurred processing your request"
-            };
-            var json = JsonSerializer.Serialize(response);
-            return context.Response.WriteAsync(json);
-        }
+            Code = "INTERNAL_ERROR",
+            Message = "An error occurred processing your request"
+        };
+        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }

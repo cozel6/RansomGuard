@@ -107,6 +107,24 @@ public class FileValidatorTests
         result.Should().BeFalse("because filename is safe");
     }
 
+    [Theory]
+    [InlineData("file.exe\0.txt")]
+    [InlineData("malware\0.dll")]
+    public void ContainsPathTraversal_NullByteInjection_ReturnsTrue(string filename)
+    {
+        var result = FileValidator.ContainsPathTraversal(filename);
+
+        result.Should().BeTrue("because null bytes can be used for injection attacks");
+    }
+
+    [Fact]
+    public void IsValidExtension_NullByteInjection_ReturnsFalse()
+    {
+        var result = FileValidator.IsValidExtension("file.exe\0.txt");
+
+        result.Should().BeFalse("because filenames with null bytes should be rejected");
+    }
+
     #endregion
     #region PE Header Validation Tests
 

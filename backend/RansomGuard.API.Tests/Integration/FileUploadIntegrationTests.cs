@@ -1,84 +1,80 @@
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Headers;
-using Xunit;
 
-namespace RansomGuard.API.Tests.Integration
+namespace RansomGuard.API.Tests.Integration;
+
+public class FileUploadIntegrationTests : IClassFixture<CustomWebApplicationFactory>
 {
-    public class FileUploadIntegrationTests : IClassFixture<CustomWebApplicationFactory>
+    private readonly HttpClient _client;
+
+    public FileUploadIntegrationTests(CustomWebApplicationFactory factory)
     {
-        private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory _factory;
+        _client = factory.CreateClient();
+    }
 
-        public FileUploadIntegrationTests(CustomWebApplicationFactory factory)
-        {
-            _factory = factory;
-            _client = factory.CreateClient();
-        }
+    [Fact]
+    public async Task UploadFile_ValidPEFile_ReturnsSuccess()
+    {
+        var peBytes = CreateMinimalPEFile();
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new ByteArrayContent(peBytes);
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+        content.Add(fileContent, "file", "test.exe");
 
-        [Fact]
-        public async Task UploadFile_ValidPEFile_ReturnsSuccess()
-        {
-            // Arrange - Create minimal PE file (MZ header)
-            var peBytes = CreateMinimalPEFile();
-            var content = new MultipartFormDataContent();
-            var fileContent = new ByteArrayContent(peBytes);
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-            content.Add(fileContent, "file", "test.exe");
+        var response = await _client.PostAsync("/api/upload", content);
 
-            // Act
-            var response = await _client.PostAsync("/api/fileupload/upload", content);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
+    [Fact]
+    public async Task UploadFile_InvalidExtension_ReturnsBadRequest()
+    {
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new ByteArrayContent([0x4D, 0x5A]);
+        content.Add(fileContent, "file", "test.txt");
 
-        [Fact]
-        public async Task UploadFile_InvalidExtension_ReturnsBadRequest()
-        {
-            // Arrange
-            var content = new MultipartFormDataContent();
-            var fileContent = new ByteArrayContent(new byte[] { 0x4D, 0x5A });
-            content.Add(fileContent, "file", "test.txt");
+        var response = await _client.PostAsync("/api/upload", content);
 
-            // Act
-            var response = await _client.PostAsync("/api/fileupload/upload", content);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
 
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        }
+    // Note: null byte injection in HTTP filename headers is blocked by the .NET HTTP client itself
+    // (throws FormatException). The behavior is covered by FileValidatorTests unit tests.
 
-        private static byte[] CreateMinimalPEFile()
-        {
-            var bytes = new byte[0x200]; // 512 bytes
+[Fact]
+    public async Task UploadFile_PathTraversal_ReturnsBadRequest()
+    {
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new ByteArrayContent(CreateMinimalPEFile());
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+        content.Add(fileContent, "file", "../../etc/passwd.exe");
 
-            // DOS Header
-            bytes[0x00] = 0x4D; // 'M'
-            bytes[0x01] = 0x5A; // 'Z'
-            bytes[0x3C] = 0x40; // e_lfanew: PE header at offset 0x40
+        var response = await _client.PostAsync("/api/upload", content);
 
-            // PE Signature at 0x40
-            bytes[0x40] = 0x50; // 'P'
-            bytes[0x41] = 0x45; // 'E'
-            bytes[0x42] = 0x00;
-            bytes[0x43] = 0x00;
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
 
-            // COFF File Header at 0x44
-            bytes[0x44] = 0x4C; // Machine: IMAGE_FILE_MACHINE_I386 (0x014C)
-            bytes[0x45] = 0x01;
-            bytes[0x46] = 0x00; // NumberOfSections: 0
-            bytes[0x47] = 0x00;
-            bytes[0x54] = 0xE0; // SizeOfOptionalHeader: 224 (PE32)
-            bytes[0x55] = 0x00;
-            bytes[0x56] = 0x02; // Characteristics: IMAGE_FILE_EXECUTABLE_IMAGE
-            bytes[0x57] = 0x00;
+    [Fact]
+    public async Task UploadFile_NoFile_ReturnsBadRequest()
+    {
+        using var content = new MultipartFormDataContent();
 
-            // Optional Header at 0x58
-            bytes[0x58] = 0x0B; // Magic: 0x010B (PE32)
-            bytes[0x59] = 0x01;
+        var response = await _client.PostAsync("/api/upload", content);
 
-            return bytes;
-        }
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    private static byte[] CreateMinimalPEFile()
+    {
+        var bytes = new byte[0x200];
+        bytes[0x00] = 0x4D; bytes[0x01] = 0x5A;
+        bytes[0x3C] = 0x40;
+        bytes[0x40] = 0x50; bytes[0x41] = 0x45;
+        bytes[0x44] = 0x4C; bytes[0x45] = 0x01;
+        bytes[0x54] = 0xE0; bytes[0x55] = 0x00;
+        bytes[0x56] = 0x02; bytes[0x57] = 0x00;
+        bytes[0x58] = 0x0B; bytes[0x59] = 0x01;
+        return bytes;
     }
 }

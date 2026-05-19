@@ -1,9 +1,8 @@
-namespace RansomGuard.API.Models
+namespace RansomGuard.API.Models;
+
+public enum Verdict
 {
-    public enum Verdict
-    {
-        Safe,
-        Suspicious,
-        Ransomware
-    }
+    Safe,
+    Suspicious,
+    Ransomware
 }

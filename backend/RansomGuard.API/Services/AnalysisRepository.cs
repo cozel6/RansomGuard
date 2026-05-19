@@ -2,56 +2,53 @@ using Microsoft.EntityFrameworkCore;
 using RansomGuard.API.Data;
 using RansomGuard.API.Data.Entities;
 
-namespace RansomGuard.API.Services
+namespace RansomGuard.API.Services;
+
+public interface IAnalysisRepository
 {
-    public interface IAnalysisRepository
+    Task<Guid> SaveAnalysisAsync(AnalysisResultEntity entity);
+    Task<AnalysisResultEntity?> GetAnalysisByIdAsync(Guid id);
+    Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count, string? verdictFilter = null);
+}
+
+public class AnalysisRepository : IAnalysisRepository
+{
+    private readonly RansomGuardDbContext _context;
+    private readonly ILogger<AnalysisRepository> _logger;
+
+    public AnalysisRepository(RansomGuardDbContext context, ILogger<AnalysisRepository> logger)
     {
-        Task<Guid> SaveAnalysisAsync(AnalysisResultEntity entity);
-        Task<AnalysisResultEntity?> GetAnalysisByIdAsync(Guid id);
-        Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count, string? verdictFilter = null);
+        _context = context;
+        _logger = logger;
     }
 
-    public class AnalysisRepository : IAnalysisRepository
+    public async Task<AnalysisResultEntity?> GetAnalysisByIdAsync(Guid id)
     {
-        private readonly RansomGuardDbContext _context;
-        private readonly ILogger<AnalysisRepository> _logger;
-        public AnalysisRepository(RansomGuardDbContext context, ILogger<AnalysisRepository> logger)
-        {
-            _context = context;
-            _logger = logger;
-        }
-
-        public async Task<AnalysisResultEntity?> GetAnalysisByIdAsync(Guid id)
-        {
-            return await _context.AnalysisResults
+        return await _context.AnalysisResults
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
-        }
+    }
 
-        public async Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count, string? verdictFilter = null)
-        {
-            var query = _context.AnalysisResults.AsNoTracking();
-            if (!string.IsNullOrEmpty(verdictFilter))
-            {
-                query = query.Where(a => a.Verdict == verdictFilter);
-            }
-            return await query
-                .OrderByDescending(a => a.Timestamp)
-                .Take(count)
-                .ToListAsync();
+    public async Task<List<AnalysisResultEntity>> GetRecentAnalysesAsync(int count, string? verdictFilter = null)
+    {
+        var query = _context.AnalysisResults.AsNoTracking();
+        if (!string.IsNullOrEmpty(verdictFilter))
+            query = query.Where(a => a.Verdict == verdictFilter);
 
-        }
+        return await query
+            .OrderByDescending(a => a.Timestamp)
+            .Take(count)
+            .ToListAsync();
+    }
 
-        public async Task<Guid> SaveAnalysisAsync(AnalysisResultEntity entity)
-        {
-            _context.AnalysisResults.Add(entity);
+    public async Task<Guid> SaveAnalysisAsync(AnalysisResultEntity entity)
+    {
+        _context.AnalysisResults.Add(entity);
+        await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
+        _logger.LogInformation("Analysis saved: {Id}, Verdict: {Verdict}, Risk: {Risk}",
+            entity.Id, entity.Verdict, entity.RiskScore);
 
-            _logger.LogInformation("Analysis saved: {Id}, Verdict: {Verdict}, Risk: {Risk}",
-                entity.Id, entity.Verdict, entity.RiskScore);
-
-            return entity.Id;
-        }
+        return entity.Id;
     }
 }

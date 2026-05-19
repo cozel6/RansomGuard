@@ -1,29 +1,19 @@
-namespace RansomGuard.API.Data.Entities
+namespace RansomGuard.API.Data.Entities;
+
+public class AnalysisResultEntity
 {
-    public class AnalysisResultEntity
-    {
-        // Primary key
-        public Guid Id { get; set; }
-
-        // File metadata
-        public string Filename { get; set; } = string.Empty;
-        public string FileHash { get; set; } = string.Empty; // SHA256
-        public long FileSize { get; set; }
-
-        // Analysis results
-        public DateTime Timestamp { get; set; }
-        public int RiskScore { get; set; }
-        public double Entropy { get; set; }
-        public string SuspiciousAPIs { get; set; } = string.Empty; // JSON array
-        public string Verdict { get; set; } = string.Empty; // Safe, Suspicious, Ransomware
-
-        // PE file details
-        public int SectionCount { get; set; }
-        public int ImportCount { get; set; }
-        public int ExportCount { get; set; }
-
-        // ML Service results
-        public double? MlConfidence { get; set; }
-        public string? MlModelVersion { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Filename { get; set; } = string.Empty;
+    public string FileHash { get; set; } = string.Empty;
+    public long FileSize { get; set; }
+    public DateTime Timestamp { get; set; }
+    public int RiskScore { get; set; }
+    public double Entropy { get; set; }
+    public string SuspiciousAPIs { get; set; } = string.Empty;
+    public string Verdict { get; set; } = string.Empty;
+    public int SectionCount { get; set; }
+    public int ImportCount { get; set; }
+    public int ExportCount { get; set; }
+    public double? MlConfidence { get; set; }
+    public string? MlModelVersion { get; set; }
 }
