@@ -31,7 +31,7 @@ export const getAnalysisResult = async (uploadId: string): Promise<AnalysisResul
     const response = await apiClient.get<AnalysisHistoryItem[]>('/api/analysis/history', {
       params: {
         count: params.count || 10,
-        verdictFilter: params.verdictFilter != null ? Verdict[params.verdictFilter]: undefined
+        verdictFilter: params.verdictFilter ?? undefined
       },
     })
     return response.data

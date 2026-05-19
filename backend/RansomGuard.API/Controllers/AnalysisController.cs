@@ -26,6 +26,7 @@ public class AnalysisController : ControllerBase
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(AnalysisResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+    [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Client)]
     public async Task<IActionResult> GetAnalysis(Guid id)
     {
         var entity = await _repository.GetAnalysisByIdAsync(id);
@@ -60,9 +61,11 @@ public class AnalysisController : ControllerBase
     /// Get recent analysis history
     /// </summary>
     /// <param name="count">Number of results (default 10, max 100)</param>
+    /// <param name="verdictFilter">Optional verdict filter: Safe, Suspicious, or Ransomware</param>
     /// <returns>List of recent analyses</returns>
     [HttpGet("history")]
     [ProducesResponseType(typeof(List<AnalysisResult>), StatusCodes.Status200OK)]
+    [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Client, VaryByQueryKeys = ["count", "verdictFilter"])]
     public async Task<IActionResult> GetHistory([FromQuery] int count = 10, [FromQuery] string? verdictFilter = null)
     {
         // Cap at 100 to prevent abuse

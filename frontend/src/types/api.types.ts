@@ -1,9 +1,9 @@
 // src/types/api.types.ts
 
 export enum Verdict {
-  Safe = 0,
-  Suspicious = 1,
-  Ransomware = 2,
+  Safe = 'Safe',
+  Suspicious = 'Suspicious',
+  Ransomware = 'Ransomware',
 }
 
 export interface UploadResponse {

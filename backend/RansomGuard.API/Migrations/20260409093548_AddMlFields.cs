@@ -2,11 +2,11 @@
 
 #nullable disable
 
-namespace RansomGuard.API.Migrations
+namespace RansomGuard.API.Migrations;
+
+/// <inheritdoc />
+public partial class AddMlFields : Migration
 {
-    /// <inheritdoc />
-    public partial class AddMlFields : Migration
-    {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,5 +34,4 @@ namespace RansomGuard.API.Migrations
                 name: "MlModelVersion",
                 table: "AnalysisResults");
         }
-    }
 }

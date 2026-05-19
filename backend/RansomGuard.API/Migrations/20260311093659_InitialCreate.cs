@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RansomGuard.API.Migrations
+namespace RansomGuard.API.Migrations;
+
+/// <inheritdoc />
+public partial class InitialCreate : Migration
 {
-    /// <inheritdoc />
-    public partial class InitialCreate : Migration
-    {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,5 +50,4 @@ namespace RansomGuard.API.Migrations
             migrationBuilder.DropTable(
                 name: "AnalysisResults");
         }
-    }
 }
