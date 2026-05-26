@@ -335,75 +335,75 @@
 
 ### 6.1 ML Service Setup
 
-- [x] Creare director `ml-service/` cu structura din ghid
-- [x] Creare Python virtual environment (Python 3.11+)
-- [x] Creare `requirements.txt` și instalare dependențe de bază
+- [x] Create `ml-service/` directory with structure from guide
+- [x] Create Python virtual environment (Python 3.11+)
+- [x] Create `requirements.txt` and install base dependencies
     - [x] fastapi, uvicorn, pydantic, pydantic-settings
     - [x] lightgbm, numpy, pefile, huggingface-hub
-    - [x] python-multipart (necesar pentru file upload în FastAPI)
-    - [x] signify==0.7.1 (compatibil cu thrember)
-- [x] Creare `.gitignore` și `.env.example`
+    - [x] python-multipart (required for file upload in FastAPI)
+    - [x] signify==0.7.1 (compatible with thrember)
+- [x] Create `.gitignore` and `.env.example`
 
 ### 6.2 FastAPI Skeleton
 
-- [x] Creare `app/config.py` (Settings cu pydantic-settings)
-- [x] Creare `app/routers/health.py` (GET /health)
-- [x] Creare `app/main.py` cu CORS middleware
-- [x] Verificare: `uvicorn app.main:app --reload --port 8000` → `/health` răspunde
+- [x] Create `app/config.py` (Settings with pydantic-settings)
+- [x] Create `app/routers/health.py` (GET /health)
+- [x] Create `app/main.py` with CORS middleware
+- [x] Verify: `uvicorn app.main:app --reload --port 8000` → `/health` responds
 
 ### 6.3 Pydantic Schemas
 
-- [x] Creare `app/schemas.py`
+- [x] Create `app/schemas.py`
     - [x] `PredictResponse` (prediction, confidence, model_version, raw_score)
     - [x] `HealthResponse`
 
-### 6.4 Download Model EMBER2024
+### 6.4 Download EMBER2024 Model
 
-- [x] Instalare thrember din GitHub: `pip install git+https://github.com/FutureComputing4AI/EMBER2024.git`
-- [x] Creare `scripts/download_model.py` (descărcare `EMBER2024_PE.model` de pe Hugging Face)
-- [x] Rulare script: `python scripts/download_model.py`
-- [x] Verificare model salvat în `models/EMBER2024_PE.model`
-- [x] Actualizare `.env` cu `MODEL_PATH=./models/EMBER2024_PE.model`
+- [x] Install thrember from GitHub: `pip install git+https://github.com/FutureComputing4AI/EMBER2024.git`
+- [x] Create `scripts/download_model.py` (downloads `EMBER2024_PE.model` from Hugging Face)
+- [x] Run script: `python scripts/download_model.py`
+- [x] Verify model saved in `models/EMBER2024_PE.model`
+- [x] Update `.env` with `MODEL_PATH=./models/EMBER2024_PE.model`
 
-### 6.5 Feature Extraction + Inferență
+### 6.5 Feature Extraction + Inference
 
-- [x] Creare `app/predictor.py`
-    - [x] `load_model()` cu lazy singleton (global `_model`)
-    - [x] `predict_from_bytes(file_bytes, filename)` cu `thrember.PEFeatureExtractor` + LightGBM
-    - [x] Mapare scor → verdict: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
+- [x] Create `app/predictor.py`
+    - [x] `load_model()` with lazy singleton (global `_model`)
+    - [x] `predict_from_bytes(file_bytes, filename)` with `thrember.PEFeatureExtractor` + LightGBM
+    - [x] Score → verdict mapping: `>= 0.80` ransomware, `>= 0.40` suspicious, `< 0.40` safe
 
 ### 6.6 Predict Endpoint
 
-- [x] Creare `app/routers/predict.py` (POST /predict  file upload multipart)
-    - [x] Validare extensie (.exe, .dll)
-    - [x] Validare dimensiune (max 10MB)
-    - [x] Validare PE magic bytes (MZ)
-- [x] Actualizare `app/main.py` cu predict router + preload model la startup
-- [x] Verificare: `curl -X POST http://localhost:8000/predict -F "file=@demo/ransomguard_demo.dll"` → răspunde cu verdict
+- [x] Create `app/routers/predict.py` (POST /predict file upload multipart)
+    - [x] Validate extension (.exe, .dll)
+    - [x] Validate file size (max 10MB)
+    - [x] Validate PE magic bytes (MZ)
+- [x] Update `app/main.py` with predict router + preload model at startup
+- [x] Verify: `curl -X POST http://localhost:8000/predict -F "file=@demo/ransomguard_demo.dll"` → responds with verdict
 
 ### 6.7 Backend .NET ↔ ML Service
 
-- [x] Adăugare câmpuri `MlConfidence` și `MlModelVersion` în:
+- [x] Add `MlConfidence` and `MlModelVersion` fields in:
     - [x] `Models/AnalysisResult.cs`
     - [x] `Data/Entities/AnalysisResultEntity.cs`
     - [x] `Models/UploadResponse.cs`
-- [x] Rulare EF migration: `dotnet ef migrations add AddMlFields && dotnet ef database update`
-- [x] Creare `Services/IMlServiceClient.cs` (interfață + record `MlPrediction`)
-- [x] Creare `Services/MlServiceClient.cs` (trimite fișier de pe disc via `filePath`)
-- [x] Înregistrare `AddHttpClient<IMlServiceClient, MlServiceClient>` în `Program.cs`
-- [x] Adăugare `"MlService": { "BaseUrl": "http://localhost:8000" }` în `appsettings.Development.json`
-- [x] Actualizare `FileUploadController.cs`:
-    - [x] Injectare `IMlServiceClient` în constructor
-    - [x] Apel `PredictAsync(filePath, file.FileName)` după `AnalyzeFileAsync` și înainte de `DeleteFile`
-    - [x] Suprascrie verdict cu predicția ML dacă serviciul e disponibil
-    - [x] Include `MlConfidence` și `MlModelVersion` în entity și response
+- [x] Run EF migration: `dotnet ef migrations add AddMlFields && dotnet ef database update`
+- [x] Create `Services/IMlServiceClient.cs` (interface + record `MlPrediction`)
+- [x] Create `Services/MlServiceClient.cs` (sends file from disk via `filePath`)
+- [x] Register `AddHttpClient<IMlServiceClient, MlServiceClient>` in `Program.cs`
+- [x] Add `"MlService": { "BaseUrl": "http://localhost:8000" }` in `appsettings.Development.json`
+- [x] Update `FileUploadController.cs`:
+    - [x] Inject `IMlServiceClient` in constructor
+    - [x] Call `PredictAsync(filePath, file.FileName)` after `AnalyzeFileAsync` and before `DeleteFile`
+    - [x] Override verdict with ML prediction if service is available
+    - [x] Include `MlConfidence` and `MlModelVersion` in entity and response
 
-### 6.8 Verificare End-to-End
+### 6.8 End-to-End Verification
 
-- [x] Pornire toate serviciile (backend + ml-service + frontend)
-- [x] Test upload fișier `.exe` real prin frontend
-- [x] Verificare verdict ML în răspuns și în baza de date
-- [x] Verificare fallback: oprire ml-service → upload încă funcționează cu verdict static
+- [x] Start all services (backend + ml-service + frontend)
+- [x] Test upload of real `.exe` file via frontend
+- [x] Verify ML verdict in response and in database
+- [x] Verify fallback: stop ml-service → upload still works with static verdict
 
 ---
 
@@ -438,18 +438,18 @@
 
 ### 8.1 Create Demo Ransomware Sample
 
-- [ ] Create C# project for demo DLL
-- [ ] Import cryptographic APIs (without calling them)
-    - [ ] CryptEncrypt
-    - [ ] BCryptEncrypt
-    - [ ] CryptGenRandom
-- [ ] Add high entropy data section
-- [ ] Use non-standard PE section names
-- [ ] Strip debug symbols
-- [ ] Compile as DLL
-- [ ] Verify it triggers RansomGuard detection
-- [ ] Document in `/demo/readme.md`
-- [ ] Add source code to `/demo/src/`
+- [x] Create demo DLL source (`demo/ransomguard_demo.c` — C with mingw-w64, not C#)
+- [x] Import cryptographic APIs (without calling them)
+    - [x] CryptEncrypt
+    - [x] BCryptEncrypt
+    - [x] CryptGenRandom
+- [x] Add high entropy data section (`_entropy_pad[4096]` in `.rdata`)
+- [ ] Use non-standard PE section names (source uses `.rdata`; DLL has 19 sections from linker but no explicit custom names)
+- [x] Strip debug symbols (release build, confirmed in demo/readme.md)
+- [x] Compile as DLL (`ransomguard_demo.dll` — valid PE32+ x86-64)
+- [x] Verify it triggers RansomGuard detection (returns `suspicious`, confidence 0.616)
+- [x] Document in `/demo/readme.md` (Source Code section completed with both samples)
+- [x] Source code in `/demo/` directly (`ransomguard_demo.c`, `ransomguard_demo_high_risk.c`)
 
 ---
 
