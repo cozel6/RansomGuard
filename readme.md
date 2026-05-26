@@ -26,7 +26,7 @@ This project was developed as part of the research paper **"Ransomware Evolution
 | Frontend                 | Complete    | 100%     |
 | ML Service               | Complete    | 100%     |
 | Backend ↔ ML Integration | Complete    | 100%     |
-| Research Docs            | Not Started | 100%     |
+| Research Docs            | Complete    | 100%     |
 | Docker Deployment        | Future      | 0%       |
 
 **Last Updated:** 2026-05-26
