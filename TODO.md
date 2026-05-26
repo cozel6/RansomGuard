@@ -1,6 +1,6 @@
 # RansomGuard - Development TODO
 
-**Last updated:** 2026-04-08
+**Last updated:** 2026-05-26
 
 ## How to Use This Document
 
@@ -91,7 +91,7 @@
     - [x] DeleteFile cleanup method
     - [x] Temp directory auto-creation
     - [x] Comprehensive logging
-- [ ] Test null byte injection (file.exe\0.txt)
+- [x] Test null byte injection (file.exe\0.txt) - FileValidator rejects filenames containing \0
 - [x] Add integration test for upload endpoint
 - [x] Create CustomWebApplicationFactory for test database isolation
 - [x] Document testing infrastructure in TESTING.md
@@ -119,11 +119,11 @@
     - [x] Verdict (Verdict enum)
     - [x] FileHash (SHA256 string)
 - [x] Register service in `Program.cs` DI container
-- [ ] Add unit tests for analysis logic
-    - [ ] Test entropy calculation
-    - [ ] Test suspicious API detection
-    - [ ] Test risk score algorithm
-- [ ] Add integration test with demo DLL file
+- [x] Add unit tests for analysis logic
+    - [x] Test entropy calculation
+    - [x] Test suspicious API detection
+    - [x] Test risk score algorithm
+- [x] Add integration test with demo DLL file
 
 ### 2.3 Database & Persistence
 
@@ -149,8 +149,8 @@
     - [x] Added IAnalysisRepository interface
     - [x] Added logging for save operations
 - [x] Register repository in DI container (Program.cs)
-- [ ] Add unit tests for repository
-- [ ] Add integration test for database operations
+- [x] Add unit tests for repository - AnalysisRepositoryTests (10 tests)
+- [x] Add integration test for database operations
 
 ### 2.4 Result Retrieval Endpoints
 
@@ -158,9 +158,9 @@
     - [x] GET /Analysis/{id:guid} - Retrieve single result
     - [x] GET /Analysis/history?count=10 - Recent analyses
 - [x] Add error handling (404 if not found)
-- [ ] Add response caching headers
+- [x] Add response caching headers (300s on GET /analysis/{id}, 30s on history)
 - [x] Document endpoints in XML comments
-- [ ] Add integration tests for retrieval endpoints
+- [x] Add integration tests for retrieval endpoints - AnalysisControllerIntegrationTests (9 tests)
 
 ### 2.5 Swagger UI Configuration
 
@@ -170,7 +170,7 @@
 - [x] Add app.MapControllers() for controller routing
 - [x] Add automatic redirect from root (/) to /swagger
 - [x] Remove OpenAPI in favor of classic Swagger UI
-- [ ] Configure Swagger XML documentation output
+- [x] Configure Swagger XML documentation output - XML comments generate Swagger docs
 - [ ] Add API versioning support
 
 ### 2.6 End-to-End Workflow Integration - COMPLETE
@@ -383,27 +383,27 @@
 
 ### 6.7 Backend .NET ↔ ML Service
 
-- [ ] Adăugare câmpuri `MlConfidence` și `MlModelVersion` în:
-    - [ ] `Models/AnalysisResult.cs`
-    - [ ] `Data/Entities/AnalysisResultEntity.cs`
-    - [ ] `Models/UploadResponse.cs`
-- [ ] Rulare EF migration: `dotnet ef migrations add AddMlConfidence && dotnet ef database update`
-- [ ] Creare `Services/IMlServiceClient.cs` (interfață + record `MlPrediction`)
-- [ ] Creare `Services/MlServiceClient.cs` (trimite fișier de pe disc via `filePath`)
-- [ ] Înregistrare `AddHttpClient<IMlServiceClient, MlServiceClient>` în `Program.cs`
-- [ ] Adăugare `"MlService": { "BaseUrl": "http://localhost:8000" }` în `appsettings.Development.json`
-- [ ] Actualizare `FileUploadController.cs`:
-    - [ ] Injectare `IMlServiceClient` în constructor
-    - [ ] Apel `PredictAsync(filePath, file.FileName)` după `AnalyzeFileAsync` și înainte de `DeleteFile`
-    - [ ] Suprascrie verdict cu predicția ML dacă serviciul e disponibil
-    - [ ] Include `MlConfidence` și `MlModelVersion` în entity și response
+- [x] Adăugare câmpuri `MlConfidence` și `MlModelVersion` în:
+    - [x] `Models/AnalysisResult.cs`
+    - [x] `Data/Entities/AnalysisResultEntity.cs`
+    - [x] `Models/UploadResponse.cs`
+- [x] Rulare EF migration: `dotnet ef migrations add AddMlFields && dotnet ef database update`
+- [x] Creare `Services/IMlServiceClient.cs` (interfață + record `MlPrediction`)
+- [x] Creare `Services/MlServiceClient.cs` (trimite fișier de pe disc via `filePath`)
+- [x] Înregistrare `AddHttpClient<IMlServiceClient, MlServiceClient>` în `Program.cs`
+- [x] Adăugare `"MlService": { "BaseUrl": "http://localhost:8000" }` în `appsettings.Development.json`
+- [x] Actualizare `FileUploadController.cs`:
+    - [x] Injectare `IMlServiceClient` în constructor
+    - [x] Apel `PredictAsync(filePath, file.FileName)` după `AnalyzeFileAsync` și înainte de `DeleteFile`
+    - [x] Suprascrie verdict cu predicția ML dacă serviciul e disponibil
+    - [x] Include `MlConfidence` și `MlModelVersion` în entity și response
 
 ### 6.8 Verificare End-to-End
 
-- [ ] Pornire toate serviciile (backend + ml-service + frontend)
-- [ ] Test upload fișier `.exe` real prin frontend
-- [ ] Verificare verdict ML în răspuns și în baza de date
-- [ ] Verificare fallback: oprire ml-service → upload încă funcționează cu verdict static
+- [x] Pornire toate serviciile (backend + ml-service + frontend)
+- [x] Test upload fișier `.exe` real prin frontend
+- [x] Verificare verdict ML în răspuns și în baza de date
+- [x] Verificare fallback: oprire ml-service → upload încă funcționează cu verdict static
 
 ---
 
@@ -455,16 +455,16 @@
 
 ## Verification Checklist (Before Completion)
 
-- [x] All unit tests pass (`dotnet test`) - 32 tests passing
-- [x] All integration tests pass - 2 tests passing
+- [x] All unit tests pass (`dotnet test`) - 63 tests passing
+- [x] All integration tests pass - 16 integration tests passing
 - [x] Analyzer warnings reviewed (`dotnet build`) - 95 warnings detected, all informational
 - [ ] Code formatted (`dotnet format`) - not critical for academic demo
 - [ ] All research documents completed - deferred
-- [x] API documentation up-to-date (Swagger) - live at /swagger endpoint
-- [x] README.md updated with project status - updated 2026-03-20
+- [x] API documentation up-to-date (Swagger XML) - live at /swagger endpoint
+- [x] README.md updated with project status - updated 2026-05-26
 - [x] SETUP.md reflects current dependencies - up-to-date
 - [x] Frontend implemented - React + TypeScript + Tailwind + React Query
-- [ ] Frontend-backend end-to-end test (API calls from React to .NET)
+- [x] Frontend-backend end-to-end test (API calls from React to .NET)
 - [ ] Demo video/screenshots created (optional)
 - [ ] Deployment guide documented - not required for academic demo
 

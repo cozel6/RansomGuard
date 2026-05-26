@@ -18,18 +18,18 @@ This project was developed as part of the research paper **"Ransomware Evolution
 
 | Component                | Status         | Progress |
 | ------------------------ | -------------- | -------- |
-| Backend API              | Complete       | ~95%     |
+| Backend API              | Complete       | 100%     |
 | Static Analysis Engine   | Complete       | 100%     |
 | Database                 | Complete       | 100%     |
-| Unit Tests               | Complete       | 32 tests |
-| Integration Tests        | Partial        | 2 tests  |
+| Unit Tests               | Complete       | 47 tests |
+| Integration Tests        | Complete       | 16 tests |
 | Frontend                 | Complete       | 100%     |
 | ML Service               | Complete       | 100%     |
 | Backend ↔ ML Integration | Complete       | 100%     |
 | Research Docs            | Not Started    | 0%       |
 | Docker Deployment        | Future         | 0%       |
 
-**Last Updated:** 2026-04-29
+**Last Updated:** 2026-05-26
 
 ---
 
@@ -457,7 +457,6 @@ This project is part of the research paper:
 
 | Document | Purpose |
 |----------|---------|
-| [CLAUDE.md](CLAUDE.md) | Full technical specifications |
 | [TODO.md](TODO.md) | Step-by-step development checklist |
 | [SETUP.md](SETUP.md) | Backend setup instructions |
 | [TESTING.md](TESTING.md) | Testing guide |
